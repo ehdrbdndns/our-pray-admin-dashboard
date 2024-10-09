@@ -137,35 +137,42 @@ function MobileNav() {
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Home className="h-5 w-5" />
-            Dashboard
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            Orders
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-foreground"
-          >
-            <Package className="h-5 w-5" />
-            Products
+            홈
           </Link>
           <Link
             href="#"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Users2 className="h-5 w-5" />
-            Customers
+            사용자
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-foreground"
+          >
+            <NotebookPen className="h-5 w-5" />
+            기도 플랜
           </Link>
           <Link
             href="#"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
-            <LineChart className="h-5 w-5" />
-            Settings
+            <MessageSquareText className="h-5 w-5" />
+            기도 질문
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Book className="h-5 w-5" />
+            성경 문구
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Bell className="h-5 w-5" />
+            알림
           </Link>
         </nav>
       </SheetContent>
