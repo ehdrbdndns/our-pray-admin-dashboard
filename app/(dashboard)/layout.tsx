@@ -69,7 +69,7 @@ function DesktopNav() {
           <Home className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="사용자">
+        <NavItem href="/users" label="사용자">
           <Users2 className="h-5 w-5" />
         </NavItem>
 
@@ -179,7 +179,7 @@ function DashboardBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="#">Dashboard</Link>
+            <Link href="#">Our Pray Admin Dashboard</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
