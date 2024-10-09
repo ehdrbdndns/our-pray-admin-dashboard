@@ -1,11 +1,7 @@
 import Link from 'next/link';
 import {
-  Bell,
-  Book,
   Home,
   LineChart,
-  MessageSquareText,
-  NotebookPen,
   Package,
   Package2,
   PanelLeft,
@@ -19,6 +15,8 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -72,28 +70,24 @@ function DesktopNav() {
           <span className="sr-only">Acme Inc</span>
         </Link>
 
-        <NavItem href="/" label="홈">
+        <NavItem href="#" label="Dashboard">
           <Home className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="사용자">
+        <NavItem href="#" label="Orders">
+          <ShoppingCart className="h-5 w-5" />
+        </NavItem>
+
+        <NavItem href="/" label="Products">
+          <Package className="h-5 w-5" />
+        </NavItem>
+
+        <NavItem href="/customers" label="Customers">
           <Users2 className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="기도 플랜">
-          <NotebookPen className="h-5 w-5" />
-        </NavItem>
-
-        <NavItem href="#" label="기도 질문">
-          <MessageSquareText className="h-5 w-5" />
-        </NavItem>
-
-        <NavItem href="#" label="성경 문구">
-          <Book className="h-5 w-5" />
-        </NavItem>
-
-        <NavItem href="#" label="알림">
-          <Bell className="h-5 w-5" />
+        <NavItem href="#" label="Analytics">
+          <LineChart className="h-5 w-5" />
         </NavItem>
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -181,6 +175,16 @@ function DashboardBreadcrumb() {
           <BreadcrumbLink asChild>
             <Link href="#">Dashboard</Link>
           </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="#">Products</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>All Products</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
