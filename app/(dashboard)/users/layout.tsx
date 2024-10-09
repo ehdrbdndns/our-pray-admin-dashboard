@@ -1,5 +1,11 @@
-export default function UsersLayout() {
+export default function UsersLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div>Users Layout</div>
+    <section>
+      {children}
+    </section>
   );
 } 
