@@ -73,7 +73,7 @@ function DesktopNav() {
           <Users2 className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="기도 플랜">
+        <NavItem href="/plan" label="기도 플랜">
           <NotebookPen className="h-5 w-5" />
         </NavItem>
 
