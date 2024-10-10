@@ -3,14 +3,11 @@ import {
   Bell,
   Book,
   Home,
-  LineChart,
   MessageSquareText,
   NotebookPen,
-  Package,
   Package2,
   PanelLeft,
   Settings,
-  ShoppingCart,
   Users2
 } from 'lucide-react';
 
@@ -28,11 +25,9 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 import { Analytics } from '@vercel/analytics/react';
-import { User } from './user';
 import { VercelLogo } from '@/components/icons';
 import Providers from './providers';
 import { NavItem } from './nav-item';
-import { SearchInput } from './search';
 
 export default function DashboardLayout({
   children
@@ -47,8 +42,6 @@ export default function DashboardLayout({
           <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <MobileNav />
             <DashboardBreadcrumb />
-            <SearchInput />
-            <User />
           </header>
           <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
             {children}
@@ -76,7 +69,7 @@ function DesktopNav() {
           <Home className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="사용자">
+        <NavItem href="/users" label="사용자">
           <Users2 className="h-5 w-5" />
         </NavItem>
 
@@ -137,35 +130,42 @@ function MobileNav() {
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Home className="h-5 w-5" />
-            Dashboard
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            Orders
-          </Link>
-          <Link
-            href="#"
-            className="flex items-center gap-4 px-2.5 text-foreground"
-          >
-            <Package className="h-5 w-5" />
-            Products
+            홈
           </Link>
           <Link
             href="#"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Users2 className="h-5 w-5" />
-            Customers
+            사용자
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-foreground"
+          >
+            <NotebookPen className="h-5 w-5" />
+            기도 플랜
           </Link>
           <Link
             href="#"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
-            <LineChart className="h-5 w-5" />
-            Settings
+            <MessageSquareText className="h-5 w-5" />
+            기도 질문
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Book className="h-5 w-5" />
+            성경 문구
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Bell className="h-5 w-5" />
+            알림
           </Link>
         </nav>
       </SheetContent>
@@ -179,7 +179,7 @@ function DashboardBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="#">Dashboard</Link>
+            <Link href="#">Our Pray Admin Dashboard</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
