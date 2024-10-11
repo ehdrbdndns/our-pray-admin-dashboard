@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^3.9.0
+        version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc.0))
       '@neondatabase/serverless':
         specifier: ^0.9.4
         version: 0.9.4
@@ -86,6 +89,9 @@ importers:
       react-dom:
         specifier: 19.0.0-rc.0
         version: 19.0.0-rc.0(react@19.0.0-rc.0)
+      react-hook-form:
+        specifier: ^7.53.0
+        version: 7.53.0(react@19.0.0-rc.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -418,6 +424,11 @@ packages:
 
   '@floating-ui/utils@0.2.4':
     resolution: {integrity: sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==}
+
+  '@hookform/resolvers@3.9.0':
+    resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@img/sharp-darwin-arm64@0.33.4':
     resolution: {integrity: sha512-p0suNqXufJs9t3RqLBO6vvrgr5OhgbWp76s5gTRvdmxmuv9E1rcaqGUsl3l4mKVmXPkTkTErXediAui4x+8PSA==}
@@ -1653,6 +1664,12 @@ packages:
     peerDependencies:
       react: 19.0.0-rc.0
 
+  react-hook-form@7.53.0:
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -2062,6 +2079,10 @@ snapshots:
       react-dom: 19.0.0-rc.0(react@19.0.0-rc.0)
 
   '@floating-ui/utils@0.2.4': {}
+
+  '@hookform/resolvers@3.9.0(react-hook-form@7.53.0(react@19.0.0-rc.0))':
+    dependencies:
+      react-hook-form: 7.53.0(react@19.0.0-rc.0)
 
   '@img/sharp-darwin-arm64@0.33.4':
     optionalDependencies:
@@ -3110,6 +3131,10 @@ snapshots:
     dependencies:
       react: 19.0.0-rc.0
       scheduler: 0.25.0-rc.0
+
+  react-hook-form@7.53.0(react@19.0.0-rc.0):
+    dependencies:
+      react: 19.0.0-rc.0
 
   react-is@16.13.1: {}
 
