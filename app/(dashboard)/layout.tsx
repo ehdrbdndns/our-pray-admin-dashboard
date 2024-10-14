@@ -81,7 +81,7 @@ function DesktopNav() {
           <MessageSquareText className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="성경 문구">
+        <NavItem href="/bible" label="성경 문구">
           <Book className="h-5 w-5" />
         </NavItem>
 
@@ -154,7 +154,7 @@ function MobileNav() {
             기도 질문
           </Link>
           <Link
-            href="#"
+            href="/bible"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Book className="h-5 w-5" />
