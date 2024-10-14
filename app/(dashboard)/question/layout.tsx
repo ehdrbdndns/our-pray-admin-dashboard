@@ -1,4 +1,4 @@
-export default function PlanLayout({
+export default function QuestionLayout({
   children
 }: {
   children: React.ReactNode;
@@ -8,4 +8,4 @@ export default function PlanLayout({
       {children}
     </section>
   );
-} 
+};

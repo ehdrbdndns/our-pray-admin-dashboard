@@ -77,7 +77,7 @@ function DesktopNav() {
           <NotebookPen className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="기도 질문">
+        <NavItem href="/question" label="기도 질문">
           <MessageSquareText className="h-5 w-5" />
         </NavItem>
 
@@ -126,28 +126,28 @@ function MobileNav() {
             <span className="sr-only">Vercel</span>
           </Link>
           <Link
-            href="#"
+            href="/"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Home className="h-5 w-5" />
             홈
           </Link>
           <Link
-            href="#"
+            href="/users"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Users2 className="h-5 w-5" />
             사용자
           </Link>
           <Link
-            href="#"
+            href="/plan"
             className="flex items-center gap-4 px-2.5 text-foreground"
           >
             <NotebookPen className="h-5 w-5" />
             기도 플랜
           </Link>
           <Link
-            href="#"
+            href="/question"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <MessageSquareText className="h-5 w-5" />
