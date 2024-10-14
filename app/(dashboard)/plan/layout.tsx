@@ -1,4 +1,4 @@
-export default function UsersLayout({
+export default function PlanLayout({
   children
 }: {
   children: React.ReactNode;
