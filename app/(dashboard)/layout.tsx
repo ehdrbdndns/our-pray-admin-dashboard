@@ -85,7 +85,7 @@ function DesktopNav() {
           <Book className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="#" label="알림">
+        <NavItem href="/alarm" label="알림">
           <Bell className="h-5 w-5" />
         </NavItem>
       </nav>
@@ -161,7 +161,7 @@ function MobileNav() {
             성경 문구
           </Link>
           <Link
-            href="#"
+            href="/alarm"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Bell className="h-5 w-5" />
