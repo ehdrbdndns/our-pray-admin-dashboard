@@ -7,6 +7,8 @@ const pool = createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   port: 3306,
+  connectionLimit: 10,
+  waitForConnections: true,
 })
 
 const promisePool = pool.promise();
