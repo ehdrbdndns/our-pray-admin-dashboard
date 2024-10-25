@@ -1,8 +1,9 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import User from "./user";
+import { UserType } from "app/api/user/type";
 
-export default function UsersTable() {
+export default function UsersTable({ users }: { users: UserType[] }) {
   return (
     <Card>
       <CardHeader>
@@ -26,11 +27,7 @@ export default function UsersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <User />
-            <User />
-            <User />
-            <User />
-            <User />
+            {users.map((user) => <User key={user.user_id} user={user} />)}
           </TableBody>
         </Table>
       </CardContent>
