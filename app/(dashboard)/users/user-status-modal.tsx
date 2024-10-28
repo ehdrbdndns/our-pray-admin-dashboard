@@ -39,8 +39,6 @@ export default function UserStatusModal({ user }: { user: UserType }) {
   const updateUserState = async () => {
     setIsLoading(true);
 
-    console.log(process.env.API_URL);
-
     try {
       // fetch
       await fetch(`/api/user/status`, {
@@ -57,11 +55,11 @@ export default function UserStatusModal({ user }: { user: UserType }) {
   const onClickUpdateButton = async () => {
     try {
       await updateUserState();
+      alert('사용자 상태가 변경되었습니다.');
     } catch (e) {
       alert(e);
     }
 
-    alert('사용자 상태가 변경되었습니다.');
     triggerBtn.current?.click();
   }
 
