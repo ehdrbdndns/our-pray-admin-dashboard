@@ -18,19 +18,24 @@ async function getAllUsers() {
 }
 
 async function insertOrUpdateUserState(user_id: string, role: string, status: string) {
-  const [result, fields] = await promisePool.query(`
-    INSERT INTO user_state (role, status)
+  try {
+    const [result, fields] = await promisePool.query(`
+      INSERT INTO user_state (role, status)
+  
+        VALUES (?, ?)
+  
+      ON DUPLICATE KEY UPDATE
+        role = VALUES(role),
+        status = VALUES(status)
+  
+      WHERE user_id = ?
+    `, [role, status, user_id]);
 
-      VALUES (?, ?)
-
-    ON DUPLICATE KEY UPDATE
-      role = VALUES(role),
-      status = VALUES(status)
-
-    WHERE user_id = ?
-  `, [role, status, user_id]);
-
-  console.log(result, fields);
+    console.log(result, fields);
+  } catch (e) {
+    console.error(e);
+    throw new Error('사용자 상태 변경에 실패했습니다.');
+  }
 }
 
 export { getAllUsers, insertOrUpdateUserState }
