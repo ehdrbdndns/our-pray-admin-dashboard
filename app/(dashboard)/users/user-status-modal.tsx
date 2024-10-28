@@ -40,9 +40,13 @@ export default function UserStatusModal({ user }: { user: UserType }) {
     setIsLoading(true);
 
     try {
-      // fetch
       await fetch(`/api/user/status`, {
         method: 'POST',
+        body: JSON.stringify({
+          user_id: user.user_id,
+          role,
+          status
+        }),
       });
     } catch (e) {
       console.error(e);
