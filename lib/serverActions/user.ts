@@ -1,4 +1,4 @@
-import promisePool from "@/lib/db";
+import promisePool from "@/lib/db/db";
 import { UserType } from "./type";
 
 async function getAllUsers() {
@@ -18,19 +18,19 @@ async function getAllUsers() {
 }
 
 async function insertOrUpdateUserState(user_id: string, role: string, status: string) {
-  // const [result, fields] = await promisePool.query(`
-  //   INSERT INTO user_state (role, status)
+  const [result, fields] = await promisePool.query(`
+    INSERT INTO user_state (role, status)
 
-  //     VALUES (?, ?)
+      VALUES (?, ?)
 
-  //   ON DUPLICATE KEY UPDATE
-  //     role = VALUES(role),
-  //     status = VALUES(status)
+    ON DUPLICATE KEY UPDATE
+      role = VALUES(role),
+      status = VALUES(status)
 
-  //   WHERE user_id = ?
-  // `, [role, status, user_id]);
+    WHERE user_id = ?
+  `, [role, status, user_id]);
 
-  // console.log(result, fields);
+  console.log(result, fields);
 }
 
 export { getAllUsers, insertOrUpdateUserState }

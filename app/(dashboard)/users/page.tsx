@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UsersTable from "./users-table";
-import { getAllUsers } from "app/api/user/user";
+import { getAllUsers } from "@/lib/serverActions/user";
 
 export default async function UsersPage() {
   const users = await getAllUsers();

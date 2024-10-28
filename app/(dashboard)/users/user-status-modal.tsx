@@ -2,8 +2,6 @@
 
 import { useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { UserType } from "app/api/user/type";
-// import { insertOrUpdateUserState } from "app/api/user/user";
 
 import { Button } from "@/components/ui/button";
 import { DialogHeader } from "@/components/ui/dialog";
@@ -16,6 +14,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
+import { UserType } from "@/lib/serverActions/type";
 
 export default function UserStatusModal({ user }: { user: UserType }) {
   const [role, setRole] = useState<string>(user.role);
@@ -40,8 +39,13 @@ export default function UserStatusModal({ user }: { user: UserType }) {
   const updateUserState = async () => {
     setIsLoading(true);
 
+    console.log(process.env.API_URL);
+
     try {
-      await insertOrUpdateUserState(user.user_id, role, status);
+      // fetch
+      await fetch(`/api/user/status`, {
+        method: 'POST',
+      });
     } catch (e) {
       console.error(e);
       throw new Error('사용자 상태 변경에 실패했습니다.');
