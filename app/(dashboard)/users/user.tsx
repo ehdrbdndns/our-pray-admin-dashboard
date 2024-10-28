@@ -1,8 +1,7 @@
-import { UserType } from "app/api/user/type";
-
 import UserStatusModal from "./user-status-modal";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { UserType } from "@/lib/db/type";
 
 export default function User({ user }: { user: UserType }) {
   return (

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import User from "./user";
-import { UserType } from "app/api/user/type";
+import { UserType } from "@/lib/db/type";
 
 export default function UsersTable({ users }: { users: UserType[] }) {
   return (

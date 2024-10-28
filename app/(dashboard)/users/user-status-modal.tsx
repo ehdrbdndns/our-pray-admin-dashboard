@@ -14,7 +14,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { UserType } from "@/lib/serverActions/type";
+import { UserType } from "@/lib/db/type";
 
 export default function UserStatusModal({ user }: { user: UserType }) {
   const [role, setRole] = useState<string>(user.role);

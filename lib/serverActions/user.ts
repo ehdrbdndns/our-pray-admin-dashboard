@@ -1,5 +1,5 @@
 import promisePool from "@/lib/db/db";
-import { UserType } from "./type";
+import { UserType } from "../db/type";
 
 async function getAllUsers() {
   const [rows] = await promisePool.query<UserType[]>(`
