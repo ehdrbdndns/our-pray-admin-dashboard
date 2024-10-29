@@ -11,7 +11,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<UserType[]>([]);
 
   useEffect(() => {
-    const updateUser = async () => {
+    const fetchUsers = async () => {
       const res = await fetch('/api/user', {
         method: 'GET'
       })
@@ -21,7 +21,7 @@ export default function UsersPage() {
       setUsers(users);
     }
 
-    updateUser();
+    fetchUsers();
   }, []);
 
   if (!users) {
