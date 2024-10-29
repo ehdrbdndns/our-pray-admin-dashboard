@@ -2,6 +2,7 @@ import UserStatusModal from "./user-status-modal";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { UserType } from "@/lib/db/type";
+import { getFullDateFromDate } from "@/lib/utils";
 
 export default function User({ user }: { user: UserType }) {
   return (
@@ -26,7 +27,7 @@ export default function User({ user }: { user: UserType }) {
         </Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {new Date(user.created_date).getFullYear()}-{new Date(user.created_date).getMonth()}-{new Date(user.created_date).getDate()}
+        {getFullDateFromDate(new Date(user.created_date))}
       </TableCell>
       <TableCell>
         <UserStatusModal user={user} />
