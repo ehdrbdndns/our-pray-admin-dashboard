@@ -13,13 +13,19 @@ export default function UsersPage() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch('/api/user', {
-        method: 'GET'
-      })
+      try {
+        const res = await fetch('/api/user', {
+          method: 'GET'
+        })
 
-      const users = await res.json();
+        const users = await res.json();
 
-      setUsers(users);
+        setUsers(users);
+      } catch (e) {
+        console.error(e);
+        alert('사용자 정보를 가져오는데 실패했습니다. 관리자에게 문의하세요.');
+      }
+
       setIsLoading(false);
     }
 
