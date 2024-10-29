@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,11 @@ import { Label } from "@/components/ui/label";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
 import { UserType } from "@/lib/db/type";
+import { UserContext } from "./user-provider";
 
 export default function UserStatusModal({ user }: { user: UserType }) {
+  const { users, setUsers } = useContext(UserContext);
+
   const [role, setRole] = useState<string>(user.role);
   const [status, setStatus] = useState<string>(user.status);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,6 +51,20 @@ export default function UserStatusModal({ user }: { user: UserType }) {
           status
         }),
       });
+
+      const updatedUsers = users.map(u => {
+        if (u.user_id === user.user_id) {
+          return {
+            ...u,
+            role,
+            status
+          }
+        }
+
+        return u;
+      }) as UserType[];
+
+      setUsers(updatedUsers);
     } catch (e) {
       console.error(e);
       throw new Error('사용자 상태 변경에 실패했습니다.');
