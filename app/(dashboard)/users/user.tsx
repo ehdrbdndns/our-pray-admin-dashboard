@@ -25,7 +25,9 @@ export default function User({ user }: { user: UserType }) {
           {user.role === 'admin' ? '관리자' : user.role === 'counselor' ? '상담가' : '일반 사용자'}
         </Badge>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{user.created_date.getFullYear()}-{user.created_date.getMonth()}-{user.created_date.getDate()}</TableCell>
+      <TableCell className="hidden md:table-cell">
+        {new Date(user.created_date).getFullYear()}-{new Date(user.created_date).getMonth()}-{new Date(user.created_date).getDate()}
+      </TableCell>
       <TableCell>
         <UserStatusModal user={user} />
       </TableCell>
