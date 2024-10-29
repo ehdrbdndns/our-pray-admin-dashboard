@@ -2,8 +2,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Bible from "./bible";
 import BibleFormModal from "./bible-form-modal";
+import { BibleType } from "@/lib/db/type";
 
-export default function BibleTable() {
+export default function BibleTable({ bibles }: { bibles: BibleType[] }) {
   return (
     <Card>
       <CardHeader>
@@ -16,7 +17,6 @@ export default function BibleTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden md:table-cell">ID</TableHead>
               <TableHead>제목</TableHead>
               <TableHead className="hidden md:table-cell">내용</TableHead>
               <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
@@ -24,18 +24,14 @@ export default function BibleTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <Bible />
-            <Bible />
-            <Bible />
-            <Bible />
-            <Bible />
+            {bibles.map(bible => <Bible key={bible.bible_quote_id} bible={bible} />)}
           </TableBody>
         </Table>
       </CardContent>
       <CardFooter>
         <div className="flex justify-between w-[100%]">
           <div></div>
-          <BibleFormModal />
+          <BibleFormModal mode="create" />
         </div>
       </CardFooter>
     </Card>
