@@ -9,6 +9,7 @@ import { UserContext } from "./user-provider";
 export default function UsersPage() {
 
   const [users, setUsers] = useState<UserType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -19,12 +20,13 @@ export default function UsersPage() {
       const users = await res.json();
 
       setUsers(users);
+      setIsLoading(false);
     }
 
     fetchUsers();
   }, []);
 
-  if (!users) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
