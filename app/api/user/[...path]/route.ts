@@ -1,13 +1,13 @@
-import { getSession } from "@/lib/serverActions/auth";
+import { hasSession } from "@/lib/serverActions/auth";
 import { insertOrUpdateUserState } from "@/lib/serverActions/user";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const session = await getSession();
+    const session = await hasSession();
 
     if (!session) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { user_id, role, status } = await req.json();
