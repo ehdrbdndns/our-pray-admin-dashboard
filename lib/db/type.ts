@@ -15,3 +15,10 @@ export interface UserType extends RowDataPacket {
   status: 'active' | 'inactive' | 'banned';
   alarm: boolean;
 }
+
+export interface BibleType extends RowDataPacket {
+  bible_quote_id: string;
+  title: string;
+  content: string;
+  created_date: Date;
+}
