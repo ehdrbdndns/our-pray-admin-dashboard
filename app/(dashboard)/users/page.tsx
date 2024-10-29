@@ -1,9 +1,32 @@
+"use client"
+
+import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UsersTable from "./users-table";
-import { getAllUsers } from "@/lib/serverActions/user";
+import { UserType } from "@/lib/db/type";
+import { UserContext } from "./user-provider";
 
-export default async function UsersPage() {
-  const users = await getAllUsers();
+export default function UsersPage() {
+
+  const [users, setUsers] = useState<UserType[]>([]);
+
+  useEffect(() => {
+    const updateUser = async () => {
+      const res = await fetch('/api/user', {
+        method: 'GET'
+      })
+
+      const users = await res.json();
+
+      setUsers(users);
+    }
+
+    updateUser();
+  }, []);
+
+  if (!users) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
@@ -19,15 +42,17 @@ export default async function UsersPage() {
             {/* Search Bar */}
           </div>
         </div>
-        <TabsContent value="all">
-          <UsersTable users={users} />
-        </TabsContent>
-        <TabsContent value="active">
-          <UsersTable users={users.filter(user => user.status === 'active')} />
-        </TabsContent>
-        <TabsContent value="banned">
-          <UsersTable users={users.filter(user => user.status !== 'active')} />
-        </TabsContent>
+        <UserContext.Provider value={{ users, setUsers }}>
+          <TabsContent value="all">
+            <UsersTable users={users} />
+          </TabsContent>
+          <TabsContent value="active">
+            <UsersTable users={users.filter(user => user.status === 'active')} />
+          </TabsContent>
+          <TabsContent value="banned">
+            <UsersTable users={users.filter(user => user.status !== 'active')} />
+          </TabsContent>
+        </UserContext.Provider>
       </Tabs>
     </>
   )
