@@ -1,15 +1,16 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import BibleFormModal from "./bible-form-modal";
+import { BibleType } from "@/lib/db/type";
+import { getFullDateFromDate } from "@/lib/utils";
 
-export default function Bible() {
+export default function Bible({ bible }: { bible: BibleType }) {
   return (
     <TableRow>
-      <TableCell className="hidden md:table-cell">ID</TableCell>
-      <TableCell className="font-medium">창세기 1장 1절</TableCell>
-      <TableCell className="hidden md:table-cell">블라블라블라블라</TableCell>
-      <TableCell className="hidden md:table-cell">2024.01.01</TableCell>
+      <TableCell className="font-medium">{bible.title}</TableCell>
+      <TableCell className="hidden md:table-cell">{bible.content}</TableCell>
+      <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(bible.created_date))}</TableCell>
       <TableCell>
-        <BibleFormModal />
+        <BibleFormModal bible={bible} mode="update" />
       </TableCell>
     </TableRow>
   )
