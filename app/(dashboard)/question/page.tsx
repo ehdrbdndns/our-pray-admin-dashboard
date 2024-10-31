@@ -1,7 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import QuestionTable from "./question-table"
+import { getAllQuestions } from "@/lib/serverActions/question"
 
-export default function QuestionPage() {
+export default async function QuestionPage() {
+
+  const questions = await getAllQuestions();
+
   return (
     <>
       <Tabs defaultValue="all">
@@ -16,7 +20,13 @@ export default function QuestionPage() {
           </div>
         </div>
         <TabsContent value="all">
-          <QuestionTable />
+          <QuestionTable questions={questions} />
+        </TabsContent>
+        <TabsContent value="pend">
+          <QuestionTable questions={questions.filter((row) => !row.is_answered)} />
+        </TabsContent>
+        <TabsContent value="reply">
+          <QuestionTable questions={questions.filter((row) => row.is_answered)} />
         </TabsContent>
       </Tabs>
     </>
