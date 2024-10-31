@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getFullDateFromDate(date: Date) {
-  return `${date.getFullYear()} - ${date.getMonth()} - ${date.getDate()}`
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 }
 
 export function getUniqId() {
