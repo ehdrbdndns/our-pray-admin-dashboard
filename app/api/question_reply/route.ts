@@ -2,7 +2,7 @@ import { ReplyType } from "@/lib/db/type";
 import { hasSession } from "@/lib/serverActions/auth";
 import { retrieveQuestionById } from "@/lib/serverActions/question";
 import { insertOrUpdateReply, retrieveRepliesByQuestionId } from "@/lib/serverActions/question-reply";
-import { createUniqId } from "@/lib/utils";
+import { createUniqId, XSSFilter } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -66,6 +66,8 @@ export async function POST(req: NextRequest) {
 
     const reply_id = createUniqId();
     reply.question_reply_id = reply_id;
+
+    reply.content = XSSFilter(reply.content);
 
     const rows = await insertOrUpdateReply(reply);
 

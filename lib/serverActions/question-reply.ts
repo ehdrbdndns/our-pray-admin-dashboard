@@ -38,7 +38,7 @@ export const insertOrUpdateReply = async (reply: ReplyType) => {
       ON DUPLICATE KEY UPDATE
         content = ?,
         updated_date = NOW()
-    `, [question_reply_id, question_id, user_id, content, is_active, is_replier, content, is_active, is_replier]);
+    `, [question_reply_id, question_id, user_id, content, is_active, is_replier, content]);
 
     return rows;
   } catch (e) {
