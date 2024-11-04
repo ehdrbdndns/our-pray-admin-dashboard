@@ -1,8 +1,9 @@
+import Question from "./question";
+import { QuestionType } from "@/lib/db/type";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Question from "./question";
 
-export default function QuestionTable() {
+export default function QuestionTable({ questions }: { questions: QuestionType[] }) {
   return (
     <Card>
       <CardHeader>
@@ -15,7 +16,6 @@ export default function QuestionTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden md:table-cell">ID</TableHead>
               <TableHead>질문자</TableHead>
               <TableHead className="hidden md:table-cell">내용</TableHead>
               <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
@@ -24,10 +24,7 @@ export default function QuestionTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <Question />
-            <Question />
-            <Question />
-            <Question />
+            {questions.map((question) => <Question key={question.question_id} question={question} />)}
           </TableBody>
         </Table>
       </CardContent>

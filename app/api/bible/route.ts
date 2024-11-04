@@ -1,6 +1,6 @@
 import { hasSession } from "@/lib/serverActions/auth";
 import { deleteBible, getAllBibles, insertOrUpdateBible } from "@/lib/serverActions/bible";
-import { getUniqId } from "@/lib/utils";
+import { createUniqId } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
     }
 
-    const bible_quote_id = getUniqId();
+    const bible_quote_id = createUniqId();
 
     await insertOrUpdateBible(bible_quote_id, title, content);
 
