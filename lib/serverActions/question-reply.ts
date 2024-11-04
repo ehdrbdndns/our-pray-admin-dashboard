@@ -15,6 +15,7 @@ export const retrieveRepliesByQuestionId = async (questionId: string) => {
         ON reply.user_id = user.user_id
 
       WHERE question_id = ?
+        AND is_active = 1
 
       ORDER BY reply.created_date ASC
     `, [questionId]);
@@ -44,5 +45,20 @@ export const insertOrUpdateReply = async (reply: ReplyType) => {
   } catch (e) {
     console.error(e);
     throw new Error('답변을 저장하는데 실패했습니다.');
+  }
+}
+
+export const deleteReply = async (question_reply_id: string) => {
+  try {
+    const [rows]: any = await promisePool.query(`
+      UPDATE question_reply
+      SET is_active = 0
+      WHERE question_reply_id = ?
+    `, [question_reply_id]);
+
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw new Error('답변을 삭제하는데 실패했습니다.');
   }
 }

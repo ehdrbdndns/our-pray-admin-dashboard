@@ -1,7 +1,7 @@
 import { ReplyType } from "@/lib/db/type";
 import { hasSession } from "@/lib/serverActions/auth";
 import { retrieveQuestionById } from "@/lib/serverActions/question";
-import { insertOrUpdateReply, retrieveRepliesByQuestionId } from "@/lib/serverActions/question-reply";
+import { deleteReply, insertOrUpdateReply, retrieveRepliesByQuestionId } from "@/lib/serverActions/question-reply";
 import { createUniqId, XSSFilter } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -111,6 +111,35 @@ export async function PATCH(req: NextRequest) {
     }
 
     return NextResponse.json({ reply }, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    console.log("delete question reply");
+
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { question_reply_id } = await req.json();
+
+    if (!question_reply_id) {
+      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+    }
+
+    const rows = await deleteReply(question_reply_id);
+
+    if (rows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Failed to delete reply' }, { status: 500 });
+    }
+
+    return NextResponse.json({ question_reply_id }, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

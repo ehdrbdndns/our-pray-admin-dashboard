@@ -26,7 +26,32 @@ export default function ReplyFormModal({
     setIsLoading(true);
 
     try {
+      const confirm = window.confirm('정말로 삭제하시겠습니까?');
 
+      if (!confirm) {
+        return;
+      }
+
+      const res = await fetch('/api/question_reply', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          question_reply_id
+        })
+      })
+
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        throw new Error(data.error);
+      }
+
+      setReplys((prev) => {
+        return prev.filter((reply) => reply.question_reply_id !== question_reply_id);
+      })
+
+      alert('답변이 삭제되었습니다.');
+
+      triggerBtn.current?.click();
     } catch (e) {
       console.error(e);
       alert('답변을 삭제하는데 실패했습니다.');
