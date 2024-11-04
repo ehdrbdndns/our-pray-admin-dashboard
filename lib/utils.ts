@@ -12,3 +12,7 @@ export function getFullDateFromDate(date: Date) {
 export function createUniqId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
+
+export function XSSFilter(content: string) {
+  return content.replace(/</g, "<").replace(/>/g, ">");
+}

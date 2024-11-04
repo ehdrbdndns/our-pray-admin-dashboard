@@ -20,7 +20,7 @@ export default function Reply({ reply }: { reply: ReplyType }) {
       }
       {/* Text Area */}
       <div className="rounded-md border p-4 bg-slate-200">
-        <p>
+        <p className="whitespace-pre-line">
           {content}
         </p>
         <div className="flex flex-col w-[100%] text-end mt-3">

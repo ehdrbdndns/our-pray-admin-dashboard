@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { ReplyType } from "@/lib/db/type";
@@ -16,6 +16,9 @@ export default function QuestionDetailPage() {
 
   const [replys, setReplys] = useState<ReplyType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [content, setContent] = useState<string>('');
+
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const id = pathName.split("/")[2];
@@ -39,6 +42,60 @@ export default function QuestionDetailPage() {
     fetchReplys(id);
   }, [pathName])
 
+  useEffect(() => {
+    const scrollArea = scrollAreaRef?.current?.childNodes[1] as HTMLElement;
+
+    if (scrollArea) {
+      scrollArea.scrollTop = scrollArea.scrollHeight;
+    }
+  }, [replys])
+
+  const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  }
+
+  const onClickSubmitButton = async () => {
+
+    if (content.trim() === '') {
+      alert('내용을 입력하세요.');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/question_reply`, {
+        method: "POST",
+        body: JSON.stringify({
+          question_id: replys[0].question_id,
+          user_id: 'admin',
+          content,
+          is_active: true,
+          is_replier: true
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        throw new Error(data.error);
+      }
+
+      // add new reply to list
+      setReplys([...replys, {
+        ...data.reply,
+        created_date: new Date().toISOString(),
+        updated_date: new Date().toISOString()
+      }]);
+
+      alert('답변이 저장되었습니다.');
+
+      setContent('');
+
+    } catch (e) {
+      console.error(e);
+      alert('답변을 저장하는데 실패했습니다.');
+    }
+  }
+
   if (isLoading || replys.length === 0) return <div>Loading...</div>
 
   return (
@@ -49,7 +106,7 @@ export default function QuestionDetailPage() {
         </CardHeader>
         <CardContent>
           {/* record of question */}
-          <ScrollArea className="h-[60vh] rounded-md border p-4">
+          <ScrollArea ref={scrollAreaRef} className="h-[60vh] rounded-md border p-4">
             {replys.map((row) => <Reply key={row.question_reply_id} reply={row} />)}
           </ScrollArea>
 
@@ -57,10 +114,10 @@ export default function QuestionDetailPage() {
 
           {/* Input for reply */}
           <div>
-            <Textarea placeholder="답변을 입력하세요." />
+            <Textarea placeholder="답변을 입력하세요." value={content} onChange={onChangeContent} />
             <div className="flex justify-between mt-3">
               <div></div>
-              <Button>답변하기</Button>
+              <Button onClick={onClickSubmitButton}>답변하기</Button>
             </div>
           </div>
         </CardContent>
