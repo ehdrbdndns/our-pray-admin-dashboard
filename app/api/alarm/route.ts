@@ -1,6 +1,8 @@
-import { getAllAlarms } from "@/lib/serverActions/alarm";
+import { AlarmType } from "@/lib/db/type";
+import { getAllAlarms, insertOrUpdateAlarm } from "@/lib/serverActions/alarm";
 import { hasSession } from "@/lib/serverActions/auth";
-import { NextResponse } from "next/server";
+import { createUniqId, XSSFilter } from "@/lib/utils";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -15,6 +17,45 @@ export async function GET() {
     const alarms = await getAllAlarms();
 
     return NextResponse.json(alarms, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    console.log("create alarm");
+
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { title, message, next_notification_date } = await req.json() as AlarmType;
+
+    if (!title || !message) {
+      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+    }
+
+    const alarm_id = createUniqId();
+
+    const alarm = {
+      alarm_id,
+      title,
+      message: XSSFilter(message),
+      last_notification_date: null,
+      next_notification_date
+    } as AlarmType;
+
+    const rows = await insertOrUpdateAlarm(alarm);
+
+    if (rows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+
+    return NextResponse.json({ alarm }, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

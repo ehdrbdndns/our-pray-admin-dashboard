@@ -53,7 +53,7 @@ export interface AlarmType extends RowDataPacket {
   alarm_id: string;
   title: string;
   message: string;
-  last_notification_date: string;
-  next_notification_date: string;
+  last_notification_date: string | null;
+  next_notification_date: string | null;
   created_date: string;
 }
