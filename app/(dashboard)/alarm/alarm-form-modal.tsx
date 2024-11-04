@@ -9,6 +9,7 @@ import { AlarmType } from "@/lib/db/type";
 import { Loader2 } from "lucide-react";
 import { useContext, useRef, useState } from "react";
 import { AlarmContext } from "./alarm-provider";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mode: 'create' | 'update' }) {
 
@@ -24,6 +25,7 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
   const [isLoading, setIsLoading] = useState(false);
 
   const triggerBtn = useRef<HTMLButtonElement>(null);
+  const deleteTriggerBtn = useRef<HTMLButtonElement>(null);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const onMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value);
@@ -72,6 +74,38 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
     setIsLoading(false);
   }
 
+  const onClickDeleteButton = async () => {
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/alarm', {
+        method: 'DELETE',
+        body: JSON.stringify({
+          alarm_id: alarm?.alarm_id
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        throw new Error(data.error);
+      }
+
+      alert('알람 정보를 삭제하는데 성공했습니다.');
+
+      deleteTriggerBtn.current?.click();
+      triggerBtn.current?.click();
+
+      const newAlarms = alarms.filter((row) => row.alarm_id !== alarm?.alarm_id);
+      setAlarms(newAlarms);
+    } catch (e) {
+      console.error(e);
+      alert('알람 정보를 삭제하는데 실패했습니다.');
+    }
+
+    setIsLoading(false);
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -112,9 +146,43 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
           />
         </div>
         <DialogFooter>
-          <Button onClick={onClickSubmitButton}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : mode === 'create' ? '생성' : '수정'}
-          </Button>
+          <div className="flex justify-between">
+            <div />
+            <div>
+              {
+                mode === 'update' ? (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button ref={deleteTriggerBtn} variant={'destructive'} disabled={isLoading}>
+                        삭제
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          삭제한 데이터는 복구할 수 없습니다.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>취소</AlertDialogCancel>
+                        <AlertDialogAction onClick={onClickDeleteButton}>
+                          {
+                            isLoading
+                              ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              : '삭제'
+                          }
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : ''
+              }
+              <Button className="ml-2" onClick={onClickSubmitButton}>
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : mode === 'create' ? '생성' : '수정'}
+              </Button>
+            </div>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog >

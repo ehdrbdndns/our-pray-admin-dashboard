@@ -38,3 +38,16 @@ export const insertOrUpdateAlarm = async (alarm: AlarmType) => {
     throw new Error('알람 정보를 입력/수정하는데 실패했습니다.');
   }
 }
+
+export const deleteAlarm = async (alarm_id: string) => {
+  try {
+    const [rows]: any = await promisePool.query(`
+      DELETE FROM alarm WHERE alarm_id = ?
+    `, [alarm_id]);
+
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw new Error('알람 정보를 삭제하는데 실패했습니다.');
+  }
+}

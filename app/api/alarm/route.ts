@@ -1,5 +1,5 @@
 import { AlarmType } from "@/lib/db/type";
-import { getAllAlarms, insertOrUpdateAlarm } from "@/lib/serverActions/alarm";
+import { deleteAlarm, getAllAlarms, insertOrUpdateAlarm } from "@/lib/serverActions/alarm";
 import { hasSession } from "@/lib/serverActions/auth";
 import { createUniqId, XSSFilter } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -93,6 +93,35 @@ export async function PATCH(req: NextRequest) {
     }
 
     return NextResponse.json({ alarm }, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    console.log("delete alarm");
+
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { alarm_id } = await req.json() as { alarm_id: string };
+
+    if (!alarm_id) {
+      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+    }
+
+    const rows = await deleteAlarm(alarm_id);
+
+    if (rows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+
+    return NextResponse.json({ alarm_id }, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
