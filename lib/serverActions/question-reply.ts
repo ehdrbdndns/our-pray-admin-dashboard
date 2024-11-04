@@ -25,3 +25,24 @@ export const retrieveRepliesByQuestionId = async (questionId: string) => {
     throw new Error('답변 목록을 불러오는데 실패했습니다.');
   }
 }
+
+export const insertOrUpdateReply = async (reply: ReplyType) => {
+  const { question_reply_id, question_id, user_id, content, is_active, is_replier } = reply;
+
+  try {
+    const [rows]: any = await promisePool.query(`
+      INSERT INTO question_reply 
+        (question_reply_id, question_id, user_id, content, is_active, is_replier)
+      VALUES 
+        (?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        content = ?,
+        updated_date = NOW()
+    `, [question_reply_id, question_id, user_id, content, is_active, is_replier, content, is_active, is_replier]);
+
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw new Error('답변을 저장하는데 실패했습니다.');
+  }
+}
