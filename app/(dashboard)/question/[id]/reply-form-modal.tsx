@@ -122,7 +122,7 @@ export default function ReplyFormModal({
         </div>
         <DialogFooter>
           <AlertDialog>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
               <Button variant={'destructive'} disabled={isLoading}>
                 삭제
               </Button>
