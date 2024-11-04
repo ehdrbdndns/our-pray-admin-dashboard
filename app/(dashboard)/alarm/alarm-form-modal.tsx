@@ -25,7 +25,6 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
   const [isLoading, setIsLoading] = useState(false);
 
   const triggerBtn = useRef<HTMLButtonElement>(null);
-  const deleteTriggerBtn = useRef<HTMLButtonElement>(null);
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
   const onMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value);
@@ -91,13 +90,14 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
         throw new Error(data.error);
       }
 
-      alert('알람 정보를 삭제하는데 성공했습니다.');
-
-      deleteTriggerBtn.current?.click();
+      // Use setTimeout to ensure that the click event of triggerBtn is executed first,
       triggerBtn.current?.click();
+      setTimeout(() => {
+        const newAlarms = alarms.filter((row) => row.alarm_id !== alarm?.alarm_id);
+        setAlarms(newAlarms);
+      }, 100)
 
-      const newAlarms = alarms.filter((row) => row.alarm_id !== alarm?.alarm_id);
-      setAlarms(newAlarms);
+      alert('알람 정보를 삭제하는데 성공했습니다.');
     } catch (e) {
       console.error(e);
       alert('알람 정보를 삭제하는데 실패했습니다.');
@@ -153,7 +153,7 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
                 mode === 'update' ? (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button ref={deleteTriggerBtn} variant={'destructive'} disabled={isLoading}>
+                      <Button variant={'destructive'} disabled={isLoading}>
                         삭제
                       </Button>
                     </AlertDialogTrigger>
