@@ -48,3 +48,12 @@ export interface ReplyType extends RowDataPacket {
 
   user_name: string;
 }
+
+export interface AlarmType extends RowDataPacket {
+  alarm_id: string;
+  title: string;
+  message: string;
+  last_notification_date: string;
+  next_notification_date: string;
+  created_date: string;
+}
