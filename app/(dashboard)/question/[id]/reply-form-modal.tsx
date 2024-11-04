@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Pencil } from "lucide-react";
 import { ReplyContext } from "./reply-provider";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export default function ReplyFormModal({
   question_reply_id, question_id, initValue
@@ -26,12 +27,6 @@ export default function ReplyFormModal({
     setIsLoading(true);
 
     try {
-      const confirm = window.confirm('정말로 삭제하시겠습니까?');
-
-      if (!confirm) {
-        return;
-      }
-
       const res = await fetch('/api/question_reply', {
         method: 'DELETE',
         body: JSON.stringify({
@@ -126,13 +121,31 @@ export default function ReplyFormModal({
           />
         </div>
         <DialogFooter>
-          <Button onClick={onClickDeleteButton} variant={'destructive'} disabled={isLoading}>
-            {
-              isLoading
-                ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                : '삭제'
-            }
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button variant={'destructive'} disabled={isLoading}>
+                삭제
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  삭제한 데이터는 복구할 수 없습니다.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>취소</AlertDialogCancel>
+                <AlertDialogAction onClick={onClickDeleteButton}>
+                  {
+                    isLoading
+                      ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      : '삭제'
+                  }
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Button onClick={onClickSubmitButton} disabled={isLoading}>
             {
               isLoading
