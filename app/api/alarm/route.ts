@@ -61,3 +61,40 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    console.log("update alarm");
+
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { alarm_id, title, message, last_notification_date, next_notification_date } = await req.json() as AlarmType;
+
+    if (!alarm_id || !title || !message) {
+      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+    }
+
+    const alarm = {
+      alarm_id,
+      title,
+      message: XSSFilter(message),
+      last_notification_date: last_notification_date || null,
+      next_notification_date: next_notification_date || null
+    } as AlarmType;
+
+    const rows = await insertOrUpdateAlarm(alarm);
+
+    if (rows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
+
+    return NextResponse.json({ alarm }, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

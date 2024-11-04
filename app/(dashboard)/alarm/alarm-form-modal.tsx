@@ -16,7 +16,11 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
 
   const [title, setTitle] = useState<string>(alarm?.title || '');
   const [message, setMessage] = useState<string>(alarm?.message || '');
-  const [date, setDate] = useState<string>(alarm?.date || '');
+  const [date, setDate] = useState<string>(
+    alarm?.next_notification_date
+      ? new Date(alarm.next_notification_date).toISOString().slice(0, 16)
+      : ''
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const triggerBtn = useRef<HTMLButtonElement>(null);
@@ -26,6 +30,11 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
   const onDateChange = (e: React.ChangeEvent<HTMLInputElement>) => setDate(e.target.value);
 
   const onClickSubmitButton = async () => {
+    if (!title || !message) {
+      alert('제목과 내용은 필수 입력사항입니다.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -40,14 +49,19 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
       });
 
       const data = await res.json();
-      console.log(data);
+
       if (res.status !== 200) {
         throw new Error(data.error);
       }
 
       alert('알람 정보를 저장하는데 성공했습니다.');
 
-      setAlarms([data.alarm, ...alarms]);
+      if (mode === 'update') {
+        const newAlarms = alarms.map((row) => row.alarm_id === data.alarm.alarm_id ? data.alarm : row);
+        setAlarms(newAlarms);
+      } else {
+        setAlarms([data.alarm, ...alarms]);
+      }
 
       triggerBtn.current?.click();
     } catch (e) {
@@ -91,7 +105,7 @@ export default function AlarmFromModal({ alarm, mode }: { alarm?: AlarmType, mod
           />
           <Label htmlFor="date">예약 알림 날짜 (선택)</Label>
           <Input
-            type="date"
+            type="datetime-local"
             id="date"
             value={date}
             onChange={onDateChange}
