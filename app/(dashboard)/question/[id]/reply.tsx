@@ -1,9 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ReplyType } from "@/lib/db/type";
+import ReplyFormModal from "./reply-form-modal";
 
 export default function Reply({ reply }: { reply: ReplyType }) {
 
-  const { content, is_replier, created_date, updated_date } = reply;
+  const { question_id, question_reply_id, content, is_replier, created_date, updated_date } = reply;
 
   return (
     <div className={`flex my-6 ${is_replier && 'justify-between'}`}>
@@ -27,6 +28,14 @@ export default function Reply({ reply }: { reply: ReplyType }) {
           <span className="text-xs text-slate-500">생성날짜: {created_date}</span>
           <span className="text-xs text-slate-500">수정날짜: {updated_date}</span>
         </div>
+        {is_replier ? (
+          <div className="flex justify-between mt-1">
+            <div />
+            <div className="flex">
+              <ReplyFormModal question_id={question_id} question_reply_id={question_reply_id} initValue={content} />
+            </div>
+          </div>
+        ) : ''}
       </div>
     </div >
   )

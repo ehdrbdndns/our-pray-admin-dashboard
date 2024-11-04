@@ -81,3 +81,38 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    console.log("update question reply");
+
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    let reply = body as ReplyType;
+
+    if (!reply.question_reply_id || !reply.content) {
+      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+    }
+
+    reply.content = XSSFilter(reply.content);
+    reply.is_active = true;
+    reply.is_replier = true;
+    reply.user_id = 'admin';
+
+    const rows = await insertOrUpdateReply(reply);
+
+    if (rows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Failed to update reply' }, { status: 500 });
+    }
+
+    return NextResponse.json({ reply }, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

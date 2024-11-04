@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Reply from "./reply";
+import { ReplyContext } from "./reply-provider";
 
 export default function QuestionDetailPage() {
 
@@ -99,29 +100,31 @@ export default function QuestionDetailPage() {
   if (isLoading || replys.length === 0) return <div>Loading...</div>
 
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>{`${replys[0].user_name}님의 질문입니다.`}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* record of question */}
-          <ScrollArea ref={scrollAreaRef} className="h-[60vh] rounded-md border p-4">
-            {replys.map((row) => <Reply key={row.question_reply_id} reply={row} />)}
-          </ScrollArea>
+    <ReplyContext.Provider value={{ replys, setReplys }}>
+      <div>
+        <Card>
+          <CardHeader>
+            <CardTitle>{`${replys[0].user_name}님의 질문입니다.`}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* record of question */}
+            <ScrollArea ref={scrollAreaRef} className="h-[60vh] rounded-md border p-4">
+              {replys.map((row) => <Reply key={row.question_reply_id} reply={row} />)}
+            </ScrollArea>
 
-          <hr className="mt-4 mb-4" />
+            <hr className="mt-4 mb-4" />
 
-          {/* Input for reply */}
-          <div>
-            <Textarea placeholder="답변을 입력하세요." value={content} onChange={onChangeContent} />
-            <div className="flex justify-between mt-3">
-              <div></div>
-              <Button onClick={onClickSubmitButton}>답변하기</Button>
+            {/* Input for reply */}
+            <div>
+              <Textarea placeholder="답변을 입력하세요." value={content} onChange={onChangeContent} />
+              <div className="flex justify-between mt-3">
+                <div></div>
+                <Button onClick={onClickSubmitButton}>답변하기</Button>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </ReplyContext.Provider>
   )
 }
