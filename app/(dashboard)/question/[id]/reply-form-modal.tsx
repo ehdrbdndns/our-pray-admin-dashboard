@@ -40,13 +40,16 @@ export default function ReplyFormModal({
         throw new Error(data.error);
       }
 
-      setReplys((prev) => {
-        return prev.filter((reply) => reply.question_reply_id !== question_reply_id);
-      })
+      // Use setTimeout to ensure that the click event of triggerBtn is executed first,
+      triggerBtn.current?.click();
+      setTimeout(() => {
+        setReplys((prev) => {
+          return prev.filter((reply) => reply.question_reply_id !== question_reply_id);
+        })
+      }, 100)
 
       alert('답변이 삭제되었습니다.');
 
-      triggerBtn.current?.click();
     } catch (e) {
       console.error(e);
       alert('답변을 삭제하는데 실패했습니다.');
@@ -122,7 +125,7 @@ export default function ReplyFormModal({
         </div>
         <DialogFooter>
           <AlertDialog>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
               <Button variant={'destructive'} disabled={isLoading}>
                 삭제
               </Button>

@@ -9,6 +9,14 @@ export function getFullDateFromDate(date: Date) {
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 }
 
+export function getFullTimeFromDate(date: Date) {
+  return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
+
+export function getFullDateTimeFromDate(date: Date) {
+  return `${getFullDateFromDate(date)} ${getFullTimeFromDate(date)}`
+}
+
 export function createUniqId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 }
