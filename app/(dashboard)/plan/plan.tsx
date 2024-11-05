@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { PlanType } from "@/lib/db/type";
+import { getFullDateFromDate } from "@/lib/utils";
 import Link from "next/link";
 
-export default function Plan() {
+export default function Plan({ plan }: { plan: PlanType }) {
+  const { title, updated_date, created_date } = plan;
+
   return (
     <TableRow>
-      <TableCell className="hidden md:table-cell">01</TableCell>
-      <TableCell className="font-medium">기도 습관이 잘 잡히지 않는 사람을 위한</TableCell>
-      <TableCell className="hidden md:table-cell">2024.01.01</TableCell>
+      <TableCell className="font-medium">{title}</TableCell>
+      <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(updated_date))}</TableCell>
+      <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(created_date))}</TableCell>
       <TableCell>
         {/* Button */}
         <Link href="/plan/1">
