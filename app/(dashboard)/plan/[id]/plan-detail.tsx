@@ -13,42 +13,18 @@ import { PlanType } from "@/lib/db/type";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { zfd } from "zod-form-data";
-
-const formSchema = z.object({
-  title: z.string()
-    .min(2, { message: '제목은 2자 이상 32자 이하로 입력해주세요.' })
-    .max(32, { message: '제목은 2자 이상 32자 이하로 입력해주세요.' }),
-
-  description: z.string()
-    .min(2, { message: '설명은 2자 이상 1300자 이하로 입력해주세요.' })
-    .max(512, { message: '설명은 2자 이상 1300자 이하로 입력해주세요.' }),
-
-  author_name: z.string()
-    .min(2, { message: '저자 이름은 2자 이상 32자 이하로 입력해주세요.' })
-    .max(32, { message: '저자 이름은 2자 이상 32자 이하로 입력해주세요.' }),
-
-  author_description: z.string()
-    .min(2, { message: '저자 소개는 2자 이상 1300자 이하로 입력해주세요.' })
-    .max(1300, { message: '저자 소개는 2자 이상 1300자 이하로 입력해주세요.' }),
-
-  is_active: z.boolean(),
-
-  thumbnail: zfd.file()
-    .refine((file: File) => file !== undefined, { message: "파일을 등록해야 합니다." })
-    .refine((file: File) => file.size < 1000000, { message: "파일 크기가 1MB 보다 작아야 합니다." })
-    .refine((file: File) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type), { message: "(jpeg, png, jpg) 파일만 업로드 가능합니다." }),
-
-  author_profile: zfd.file()
-    .refine((file: File) => file !== undefined, { message: "파일을 등록해야 합니다." })
-    .refine((file: File) => file.size < 1000000, { message: "파일 크기가 1MB 보다 작아야 합니다." })
-    .refine((file: File) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type), { message: "(jpeg, png, jpg) 파일만 업로드 가능합니다." })
-})
+import { createPlanFormSchema, updatePlanFormSchema } from "@/lib/form";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: string }) {
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [isLoading, setIsLoading] = useState(false);
+
+  const planFormSchema = mode === 'create' ? createPlanFormSchema : updatePlanFormSchema;
+
+  const form = useForm<z.infer<typeof planFormSchema>>({
+    resolver: zodResolver(planFormSchema),
     defaultValues: {
       title: plan.title,
       description: plan.description,
@@ -58,8 +34,33 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
     }
   })
 
-  function onSubmitPlan(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const insertOrUpdatePlan = async (formData: FormData) => {
+    setIsLoading(true);
+
+    try {
+
+    } catch (e) {
+
+    }
+
+    setIsLoading(false);
+  }
+
+  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('author_name', values.author_name);
+    formData.append('author_description', values.author_description);
+    formData.append('is_active', values.is_active.toString());
+    formData.append('thumbnail', values.thumbnail);
+    formData.append('author_profile', values.author_profile);
+
+    if (mode === 'update') {
+      formData.append('plan_id', plan.plan_id)
+    }
+
+    insertOrUpdatePlan(formData);
   }
 
   return (
@@ -199,8 +200,20 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
             </div>
             <div className="flex justify-end mt-1">
               <div className="flex">
-                <Button variant={'destructive'}>비활성화</Button>
-                <Button className="ml-2">저장</Button>
+                <Button variant={'destructive'}>
+                  {
+                    isLoading
+                      ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      : '비활성화'
+                  }
+                </Button>
+                <Button className="ml-2">
+                  {
+                    isLoading
+                      ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      : '저장'
+                  }
+                </Button>
               </div>
             </div>
           </form>

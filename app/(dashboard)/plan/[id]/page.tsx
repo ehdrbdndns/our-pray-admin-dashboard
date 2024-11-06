@@ -49,7 +49,7 @@ export default function PlanDetailPage({ }) {
         author_name: '',
         author_description: '',
         author_profile: '',
-        is_active: true,
+        is_active: false,
         updated_date: '',
         created_date: ''
       } as PlanType);
