@@ -49,12 +49,12 @@ export async function POST(req: NextRequest) {
       created_date: ''
     } as PlanType;
 
-    // if (!safeData.success) {
-    //   console.error(safeData.error);
-    //   return NextResponse.json({ error: "Bad Request" }, { status: 400 });
-    // }
-
-    // const plan = safeData.data;
+    if (
+      !plan.title || !plan.description || !plan.author_description || !plan.author_name
+      || !plan.author_profile || !plan.thumbnail || !plan.s_thumbnail
+    ) {
+      return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+    }
 
     // Todo update thumbnail to AWS S3
     const thumbnailPath = "";
