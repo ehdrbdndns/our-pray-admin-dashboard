@@ -63,6 +63,7 @@ export interface PlanType extends RowDataPacket {
   title: string;
   description: string;
   thumbnail: string;
+  s_thumbnail: string;
 
   author_name: string;
   author_description: string;

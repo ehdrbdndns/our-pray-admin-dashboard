@@ -48,13 +48,15 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
 
   const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
     const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('author_name', values.author_name);
-    formData.append('author_description', values.author_description);
-    formData.append('is_active', values.is_active.toString());
-    formData.append('thumbnail', values.thumbnail);
-    formData.append('author_profile', values.author_profile);
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (typeof value === 'boolean') {
+        formData.append(key, value.toString());
+      } else {
+        formData.append(key, value);
+      }
+
+    });
 
     if (mode === 'update') {
       formData.append('plan_id', plan.plan_id)
@@ -98,6 +100,29 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
                     render={({ field: { value, onChange, ...fieldProps } }) => (
                       <FormItem>
                         <FormLabel>썸네일</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            {...fieldProps}
+                            onChange={(event) =>
+                              onChange(event.target.files && event.target.files[0])
+                            }
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          {/* TODO description */}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="s_thumbnail"
+                    render={({ field: { value, onChange, ...fieldProps } }) => (
+                      <FormItem>
+                        <FormLabel>작은 썸네일</FormLabel>
                         <FormControl>
                           <Input
                             type="file"
@@ -161,7 +186,7 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
                     name="author_profile"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
                       <FormItem>
-                        <FormLabel>프로필</FormLabel>
+                        <FormLabel>프로필(52px * 52px)</FormLabel>
                         <FormControl>
                           <Input
                             type="file"
