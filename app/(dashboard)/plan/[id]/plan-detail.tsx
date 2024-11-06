@@ -38,9 +38,23 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
     setIsLoading(true);
 
     try {
+      const res = await fetch('/api/plan', {
+        method: mode === 'create' ? 'POST' : 'PUT',
+        body: formData
+      });
 
+      const data = await res.json();
+
+      if (res.status !== 200) {
+        throw new Error(data.error);
+      }
+
+      alert('플랜이 성공적으로 저장되었습니다.');
+
+      // link to plan list page
     } catch (e) {
-
+      console.error(e);
+      alert('플랜 저장에 실패했습니다.');
     }
 
     setIsLoading(false);
@@ -99,7 +113,7 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
                     name="thumbnail"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
                       <FormItem>
-                        <FormLabel>썸네일</FormLabel>
+                        <FormLabel>썸네일(686px * 360px)</FormLabel>
                         <FormControl>
                           <Input
                             type="file"
@@ -122,7 +136,7 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
                     name="s_thumbnail"
                     render={({ field: { value, onChange, ...fieldProps } }) => (
                       <FormItem>
-                        <FormLabel>작은 썸네일</FormLabel>
+                        <FormLabel>작은 썸네일(320px * 320px)</FormLabel>
                         <FormControl>
                           <Input
                             type="file"
@@ -225,14 +239,14 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
             </div>
             <div className="flex justify-end mt-1">
               <div className="flex">
-                <Button variant={'destructive'}>
+                <Button variant={'destructive'} disabled={isLoading}>
                   {
                     isLoading
                       ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       : '비활성화'
                   }
                 </Button>
-                <Button className="ml-2">
+                <Button className="ml-2" disabled={isLoading}>
                   {
                     isLoading
                       ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
