@@ -40,10 +40,10 @@ export default function PlanDetailPage({ }) {
       setIsLoading(false);
     }
 
-    if (plan_id === '-1') {
+    if (plan_id === 'create' || !plan_id) {
       setMode('create');
       setPlan({
-        plan_id: '-1',
+        plan_id: 'create',
         title: '',
         description: '',
         author_name: '',

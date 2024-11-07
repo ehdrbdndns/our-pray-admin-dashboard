@@ -26,6 +26,7 @@ export const createPlanFormSchema = z.object({
     .refine((file: File) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type), { message: "(jpeg, png, jpg) 파일만 업로드 가능합니다." }),
 
   s_thumbnail: zfd.file()
+    .refine((file: File) => file !== undefined, { message: "파일을 등록해야 합니다." })
     .refine((file: File) => file.size < 1000000, { message: "파일 크기가 1MB 보다 작아야 합니다." })
     .refine((file: File) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type), { message: "(jpeg, png, jpg) 파일만 업로드 가능합니다." }),
 

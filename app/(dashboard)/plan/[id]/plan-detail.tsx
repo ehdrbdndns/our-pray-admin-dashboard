@@ -16,6 +16,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { createPlanFormSchema, updatePlanFormSchema } from "@/lib/form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { uploadFileToS3 } from "@/lib/s3";
 
 export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: string }) {
 
@@ -34,10 +35,30 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
     }
   })
 
-  const insertOrUpdatePlan = async (formData: FormData) => {
+  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
     setIsLoading(true);
 
+    const formData = new FormData();
+
     try {
+      const thumbnail = await uploadFileToS3('plan/thumbnail', values.thumbnail);
+      const s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail);
+      const author_profile = await uploadFileToS3('plan/author_profile', values.author_profile);
+
+      formData.append('title', values.title);
+      formData.append('description', values.description);
+      formData.append('author_name', values.author_name);
+      formData.append('author_description', values.author_description);
+      formData.append('is_active', values.is_active.toString());
+
+      formData.append('thumbnail', thumbnail);
+      formData.append('s_thumbnail', s_thumbnail);
+      formData.append('author_profile', author_profile);
+
+      if (mode === 'update') {
+        formData.append('plan_id', plan.plan_id)
+      }
+
       const res = await fetch('/api/plan', {
         method: mode === 'create' ? 'POST' : 'PUT',
         body: formData
@@ -45,38 +66,18 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
 
       const data = await res.json();
 
-      if (res.status !== 200) {
+      if (!res.ok) {
         throw new Error(data.error);
       }
 
       alert('플랜이 성공적으로 저장되었습니다.');
 
-      // link to plan list page
     } catch (e) {
       console.error(e);
-      alert('플랜 저장에 실패했습니다.');
+      alert(e);
     }
 
     setIsLoading(false);
-  }
-
-  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
-    const formData = new FormData();
-
-    Object.entries(values).forEach(([key, value]) => {
-      if (typeof value === 'boolean') {
-        formData.append(key, value.toString());
-      } else {
-        formData.append(key, value);
-      }
-
-    });
-
-    if (mode === 'update') {
-      formData.append('plan_id', plan.plan_id)
-    }
-
-    insertOrUpdatePlan(formData);
   }
 
   return (

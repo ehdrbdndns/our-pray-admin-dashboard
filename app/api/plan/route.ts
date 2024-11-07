@@ -24,8 +24,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  console.log("Hello");
-  console.log("post plan");
+  console.log("post plan detail");
+
   try {
     const session = await hasSession();
 
@@ -34,7 +34,6 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-    // const safeData = createPlanFormSchema.safeParse(formData);
 
     const plan = {
       title: formData.get('title'),
@@ -56,26 +55,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Bad request' }, { status: 400 });
     }
 
-    // Todo update thumbnail to AWS S3
-    const thumbnailPath = "";
-
-    // Todo update s_thumbnail to AWS S3
-    const s_thumbnailPath = "";
-
-    // Todo update author_profile to AWS S3
-    const author_profilePath = "";
-
     const plan_id = createUniqId();
-
-    const newPlan = {
-      ...plan,
-      plan_id,
-      thumbnail: thumbnailPath,
-      s_thumbnail: s_thumbnailPath,
-      author_profile: author_profilePath,
-      updated_date: "",
-      created_date: "",
-    } as PlanType;
+    const newPlan = { ...plan, plan_id };
 
     const { affectedRows } = await insertOrUpdatePlan(newPlan) as { affectedRows: number };
 

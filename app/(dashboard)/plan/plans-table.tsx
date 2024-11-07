@@ -37,7 +37,7 @@ export default function PlansTable({ plans }: { plans: PlanType[] }) {
         <div className="flex justify-between w-[100%]">
           <div></div>
           <Button>
-            <Link href="/plan/-1">
+            <Link href="/plan/create">
               기도 플랜 생성하기
             </Link>
           </Button>
