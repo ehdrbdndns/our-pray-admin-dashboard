@@ -36,43 +36,12 @@ export default function PlansTable({ plans }: { plans: PlanType[] }) {
       <CardFooter>
         <div className="flex justify-between w-[100%]">
           <div></div>
-          <Button>
-            <Link href="/plan/create">
+          <Link href="/plan/create">
+            <Button>
               기도 플랜 생성하기
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
-        {/* <form className="flex items-center w-full justify-between">
-          <div className="text-xs text-muted-foreground">
-            Showing{' '}
-            <strong>
-              {Math.min(offset - productsPerPage, totalProducts) + 1}-{offset}
-            </strong>{' '}
-            of <strong>{totalProducts}</strong> products
-          </div>
-          <div className="flex">
-            <Button
-              formAction={prevPage}
-              variant="ghost"
-              size="sm"
-              type="submit"
-              disabled={offset === productsPerPage}
-            >
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Prev
-            </Button>
-            <Button
-              formAction={nextPage}
-              variant="ghost"
-              size="sm"
-              type="submit"
-              disabled={offset + productsPerPage > totalProducts}
-            >
-              Next
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
-        </form> */}
       </CardFooter>
     </Card>
   )

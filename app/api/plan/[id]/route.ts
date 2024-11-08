@@ -1,10 +1,11 @@
 import { hasSession } from "@/lib/serverActions/auth";
+import { retrievePlanById } from "@/lib/serverActions/plan";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   console.log("retrieve plan by id");
+
   const id = params.id;
-  console.log(id);
 
   try {
     const session = await hasSession();
@@ -13,12 +14,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log(req);
+    if (!id) {
+      return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+    }
 
-    // const plan = await retrievePlanById(plan_id);
+    const plan = await retrievePlanById(id);
 
-    // return NextResponse.json(plan, { status: 200 });
-    return NextResponse.json({ error: 'Not Implemented' }, { status: 501 });
+    return NextResponse.json(plan, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

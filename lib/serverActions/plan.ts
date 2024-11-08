@@ -14,6 +14,22 @@ export async function getAllPlans() {
   }
 }
 
+export async function retrievePlanById(plan_id: string) {
+  try {
+    const [rows] = await promisePool.query<PlanType[]>(`
+      SELECT * 
+      FROM plan 
+      WHERE plan_id = ?
+      LIMIT 1
+    `, [plan_id]);
+
+    return rows[0];
+  } catch (e) {
+    console.error(e);
+    throw new Error('기도 플랜 정보를 가져오는데 실패했습니다.');
+  }
+}
+
 export async function insertOrUpdatePlan(plan: PlanType) {
   const {
     plan_id, title, description, author_name,

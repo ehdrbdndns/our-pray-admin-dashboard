@@ -42,15 +42,15 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
       const s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail);
       const author_profile = await uploadFileToS3('plan/author_profile', values.author_profile);
 
+      formData.append('thumbnail', thumbnail);
+      formData.append('s_thumbnail', s_thumbnail);
+      formData.append('author_profile', author_profile);
+
       formData.append('title', values.title);
       formData.append('description', values.description);
       formData.append('author_name', values.author_name);
       formData.append('author_description', values.author_description);
       formData.append('is_active', values.is_active.toString());
-
-      formData.append('thumbnail', thumbnail);
-      formData.append('s_thumbnail', s_thumbnail);
-      formData.append('author_profile', author_profile);
 
       if (mode === 'update') {
         formData.append('plan_id', plan.plan_id)
@@ -68,6 +68,9 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
       }
 
       alert('플랜이 성공적으로 저장되었습니다.');
+
+      // move to /plan
+      window.location.href = '/plan';
 
     } catch (e) {
       console.error(e);
@@ -244,7 +247,7 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
                       : '비활성화'
                   }
                 </Button>
-                <Button className="ml-2" disabled={isLoading}>
+                <Button className="ml-2" disabled={isLoading} type="submit">
                   {
                     isLoading
                       ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
