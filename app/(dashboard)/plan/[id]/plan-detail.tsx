@@ -1,13 +1,10 @@
 "use client"
 
 import { z } from "zod";
-import Lecture from "./lecture";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
-import LectureFormModal from "./lecture-form-modal";
 import { Button } from "@/components/ui/button";
 import { PlanType } from "@/lib/db/type";
 import { useForm } from "react-hook-form";
@@ -258,43 +255,6 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
             </div>
           </form>
         </Form>
-      </div>
-      <hr />
-      {/* 강의 정보 */}
-      <div>
-        <Card>
-          <CardHeader>
-            <CardTitle>강의 정보</CardTitle>
-            <CardDescription>기도 플랜에 대한 강의를 관리합니다.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="hidden md:table-cell">ID</TableHead>
-                  <TableHead>강의 제목</TableHead>
-                  <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
-                  <TableHead className="hidden md:table-cell">수정 날짜</TableHead>
-                  <TableHead>수정</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {/* Content */}
-                <Lecture />
-                <Lecture />
-                <Lecture />
-                <Lecture />
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter>
-            {/* Create Lecture Brn */}
-            <div className="flex justify-between w-full">
-              <div></div>
-              <LectureFormModal />
-            </div>
-          </CardFooter>
-        </Card>
       </div>
     </div >
   )

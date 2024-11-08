@@ -4,7 +4,7 @@ import { getAllPlans, insertOrUpdatePlan } from "@/lib/serverActions/plan";
 import { createUniqId } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   console.log("get all plans");
 
   try {

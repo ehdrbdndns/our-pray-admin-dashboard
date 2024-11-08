@@ -6,7 +6,7 @@ import { getFullDateFromDate } from "@/lib/utils";
 import Link from "next/link";
 
 export default function Plan({ plan }: { plan: PlanType }) {
-  const { title, updated_date, created_date, is_active } = plan;
+  const { plan_id, title, updated_date, created_date, is_active } = plan;
 
   return (
     <TableRow>
@@ -26,7 +26,7 @@ export default function Plan({ plan }: { plan: PlanType }) {
       <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(created_date))}</TableCell>
       <TableCell>
         {/* Button */}
-        <Link href="/plan/1">
+        <Link href={`/plan/${plan_id}`}>
           <Button>
             수정
           </Button>
