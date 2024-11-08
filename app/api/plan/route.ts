@@ -70,3 +70,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  console.log("put plan detail");
+
+  try {
+    const session = await hasSession();
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const formData = await req.formData();
+
+    const plan = {
+      plan_id: formData.get('plan_id'),
+      title: formData.get('title'),
+      description: formData.get('description'),
+      author_description: formData.get('author_description'),
+      author_name: formData.get('author_name'),
+      author_profile: formData.get('author_profile'),
+      thumbnail: formData.get('thumbnail'),
+      s_thumbnail: formData.get('s_thumbnail'),
+      is_active: formData.get('is_active') === 'true',
+      updated_date: new Date().toISOString(),
+      created_date: ''
+    } as PlanType;
+
+    if (
+      !plan.plan_id || !plan.title || !plan.description || !plan.author_description || !plan.author_name
+      || !plan.author_profile || !plan.thumbnail || !plan.s_thumbnail
+    ) {
+      return NextResponse.json({ error: 'Bad request' }, { status: 400 });
+    }
+
+    const { affectedRows } = await insertOrUpdatePlan(plan) as { affectedRows: number };
+
+    if (affectedRows === 0) {
+      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+    }
+
+    return NextResponse.json({ plan_id: plan.plan_id }, { status: 200 });
+  } catch (e) {
+    console.error(e)
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

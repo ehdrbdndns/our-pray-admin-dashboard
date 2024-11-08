@@ -11,10 +11,9 @@ export default function PlanDetailPage({ }) {
 
   const [plan, setPlan] = useState<PlanType>();
   const [isLoading, setIsLoading] = useState(true);
-  const [mode, setMode] = useState<'create' | 'update'>('create');
 
   useEffect(() => {
-    const plan_id = pathName.split("/")[2];
+    const plan_id = pathName.split("/")[3];
 
     const fetchPlan = async () => {
       setIsLoading(true);
@@ -39,25 +38,7 @@ export default function PlanDetailPage({ }) {
 
       setIsLoading(false);
     }
-
-    if (plan_id === 'create' || !plan_id) {
-      setMode('create');
-      setPlan({
-        plan_id: 'create',
-        title: '',
-        description: '',
-        author_name: '',
-        author_description: '',
-        author_profile: '',
-        is_active: false,
-        updated_date: '',
-        created_date: ''
-      } as PlanType);
-      setIsLoading(false);
-    } else {
-      setMode('update');
-      fetchPlan();
-    }
+    fetchPlan();
   }, [pathName])
 
   if (isLoading) return <div>Loading...</div>
@@ -66,7 +47,7 @@ export default function PlanDetailPage({ }) {
 
   return (
     <div>
-      <PlanDetail plan={plan} mode={mode} />
+      <PlanDetail plan={plan} />
     </div>
   )
 }

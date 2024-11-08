@@ -232,22 +232,13 @@ export default function PlanDetail() {
               </Card>
             </div>
             <div className="flex justify-end mt-1">
-              <div className="flex">
-                <Button variant={'destructive'} disabled={isLoading}>
-                  {
-                    isLoading
-                      ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      : '비활성화'
-                  }
-                </Button>
-                <Button className="ml-2" disabled={isLoading} type="submit">
-                  {
-                    isLoading
-                      ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      : '저장'
-                  }
-                </Button>
-              </div>
+              <Button className="ml-2" disabled={isLoading} type="submit">
+                {
+                  isLoading
+                    ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    : '저장'
+                }
+              </Button>
             </div>
           </form>
         </Form>

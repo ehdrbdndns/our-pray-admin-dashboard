@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -10,19 +10,17 @@ import { PlanType } from "@/lib/db/type";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { createPlanFormSchema, updatePlanFormSchema } from "@/lib/form";
+import { updatePlanFormSchema } from "@/lib/form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { uploadFileToS3 } from "@/lib/s3";
 
-export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: string }) {
+export default function PlanDetail({ plan }: { plan: PlanType }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const planFormSchema = mode === 'create' ? createPlanFormSchema : updatePlanFormSchema;
-
-  const form = useForm<z.infer<typeof planFormSchema>>({
-    resolver: zodResolver(planFormSchema),
+  const form = useForm<z.infer<typeof updatePlanFormSchema>>({
+    resolver: zodResolver(updatePlanFormSchema),
     defaultValues: {
       title: plan.title,
       description: plan.description,
@@ -32,15 +30,27 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
     }
   })
 
-  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
+  const onSubmitPlan = async (values: z.infer<typeof updatePlanFormSchema>) => {
     setIsLoading(true);
 
     const formData = new FormData();
 
     try {
-      const thumbnail = await uploadFileToS3('plan/thumbnail', values.thumbnail);
-      const s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail);
-      const author_profile = await uploadFileToS3('plan/author_profile', values.author_profile);
+      let thumbnail = plan.thumbnail;
+      let s_thumbnail = plan.s_thumbnail;
+      let author_profile = plan.author_profile;
+
+      if (values.thumbnail !== undefined) {
+        thumbnail = await uploadFileToS3('plan/thumbnail', values.thumbnail)
+      }
+
+      if (values.s_thumbnail !== undefined) {
+        s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail)
+      }
+
+      if (values.author_profile !== undefined) {
+        author_profile = await uploadFileToS3('plan/author_profile', values.author_profile)
+      }
 
       formData.append('thumbnail', thumbnail);
       formData.append('s_thumbnail', s_thumbnail);
@@ -51,13 +61,10 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
       formData.append('author_name', values.author_name);
       formData.append('author_description', values.author_description);
       formData.append('is_active', values.is_active.toString());
-
-      if (mode === 'update') {
-        formData.append('plan_id', plan.plan_id)
-      }
+      formData.append('plan_id', plan.plan_id)
 
       const res = await fetch('/api/plan', {
-        method: mode === 'create' ? 'POST' : 'PUT',
+        method: 'PUT',
         body: formData
       });
 
@@ -67,7 +74,7 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
         throw new Error(data.error);
       }
 
-      alert('플랜이 성공적으로 저장되었습니다.');
+      alert('플랜이 성공적으로 수정되었습니다.');
 
       // move to /plan
       window.location.href = '/plan';
@@ -80,11 +87,19 @@ export default function PlanDetail({ plan, mode }: { plan: PlanType, mode: strin
     setIsLoading(false);
   }
 
+  const onClickSaveButton = () => {
+    const value = form.getValues();
+    onSubmitPlan(value);
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmitPlan)}>
+          <form onSubmit={(e) => {
+            onClickSaveButton();
+            e.preventDefault();
+          }}>
             <div className="flex justify-between gap-5">
               {/* 기도 플랜 정보 */}
               <Card className="w-[50%]">

@@ -39,5 +39,5 @@ export const uploadFileToS3 = async (path: string, file: File): Promise<string> 
     throw new Error('failed to upload file');
   }
 
-  return url;
+  return url + fields.key;
 }

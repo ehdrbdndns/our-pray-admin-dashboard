@@ -26,7 +26,7 @@ export default function Plan({ plan }: { plan: PlanType }) {
       <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(created_date))}</TableCell>
       <TableCell>
         {/* Button */}
-        <Link href={`/plan/${plan_id}`}>
+        <Link href={`/plan/update/${plan_id}`}>
           <Button>
             수정
           </Button>
