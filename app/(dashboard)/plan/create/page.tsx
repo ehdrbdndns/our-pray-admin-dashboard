@@ -1,6 +1,7 @@
 import PlanDetail from "./plan-detail";
 
-export default function PageDetailPage({ }) {
+export default function PlanDetailPage() {
+
   return (
     <div>
       <PlanDetail />

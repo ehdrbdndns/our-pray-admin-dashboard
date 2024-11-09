@@ -57,3 +57,20 @@ export interface AlarmType extends RowDataPacket {
   next_notification_date: string | null;
   created_date: string;
 }
+
+export interface PlanType extends RowDataPacket {
+  plan_id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  s_thumbnail: string;
+
+  author_name: string;
+  author_description: string;
+  author_profile: string;
+
+  is_active: boolean;
+
+  updated_date: string;
+  created_date: string;
+}

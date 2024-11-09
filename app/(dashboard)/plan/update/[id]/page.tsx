@@ -1,41 +1,53 @@
 "use client"
 
+import PlanDetail from "./plan-detail";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import PlansTable from "./plans-table";
 import { PlanType } from "@/lib/db/type";
 
-export default function PlanPage() {
+export default function PlanDetailPage({ }) {
 
-  const [plans, setPlans] = useState<PlanType[]>([]);
+  const pathName = usePathname();
+
+  const [plan, setPlan] = useState<PlanType>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPlans = async () => {
+    const plan_id = pathName.split("/")[3];
+
+    const fetchPlan = async () => {
       setIsLoading(true);
+
       try {
-        const res = await fetch('/api/plan');
+        const res = await fetch(`/api/plan/${plan_id}`, {
+          method: "GET"
+        });
+
         const data = await res.json();
 
         if (res.status !== 200) {
           throw new Error(data.error);
         }
-        setPlans(data);
+
+        setPlan(data);
+
       } catch (e) {
         console.error(e);
         alert("기도 플랜 정보를 가져오는데 실패했습니다.");
       }
+
       setIsLoading(false);
     }
-
-    fetchPlans();
-  }, []);
+    fetchPlan();
+  }, [pathName])
 
   if (isLoading) return <div>Loading...</div>
 
+  if (!plan) return <div>Plan not found</div>
+
   return (
-    <>
-      {/* Content */}
-      <PlansTable plans={plans} />
-    </>
+    <div>
+      <PlanDetail plan={plan} />
+    </div>
   )
 }
