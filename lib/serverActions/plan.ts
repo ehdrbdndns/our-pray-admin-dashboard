@@ -51,7 +51,8 @@ export async function insertOrUpdatePlan(plan: PlanType) {
         author_profile = VALUES(author_profile),
         is_active = VALUES(is_active),
         thumbnail = VALUES(thumbnail),
-        s_thumbnail = VALUES(s_thumbnail)
+        s_thumbnail = VALUES(s_thumbnail),
+        updated_date = NOW()
     `, [
       plan_id, title, description, author_name,
       author_description, author_profile, is_active,
