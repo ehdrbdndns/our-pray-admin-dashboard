@@ -28,7 +28,7 @@ export default function PlansTable({ plans }: { plans: PlanType[] }) {
           <TableBody>
             {/* Content */}
             {plans.map((plan) => (
-              <Plan key={plan.id} plan={plan} />
+              <Plan key={plan.plan_id} plan={plan} />
             ))}
           </TableBody>
         </Table>
