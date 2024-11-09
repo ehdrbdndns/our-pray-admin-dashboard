@@ -14,6 +14,8 @@ import { updatePlanFormSchema } from "@/lib/form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { uploadFileToS3 } from "@/lib/s3";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function PlanDetail({ plan }: { plan: PlanType }) {
 
@@ -147,6 +149,16 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
                       </FormItem>
                     )}
                   />
+                  <FormItem>
+                    <FormLabel>등록된 썸네일</FormLabel>
+                    <FormControl>
+                      <Image src={plan.thumbnail} className="h-[180px]" width={343} height={180} alt="전 썸네일" />
+                    </FormControl>
+                    <FormDescription>
+                      {/* TODO description */}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
                   <FormField
                     control={form.control}
                     name="s_thumbnail"
@@ -170,6 +182,16 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
                       </FormItem>
                     )}
                   />
+                  <FormItem>
+                    <FormLabel>등록된 작은 썸네일</FormLabel>
+                    <FormControl>
+                      <Image src={plan.s_thumbnail} className="h-[180px]" width={180} height={180} alt="전 썸네일" />
+                    </FormControl>
+                    <FormDescription>
+                      {/* TODO description */}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
                   <FormField
                     control={form.control}
                     name="description"
@@ -234,6 +256,19 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
                       </FormItem>
                     )}
                   />
+                  <FormItem>
+                    <FormLabel>등록된 프로필</FormLabel>
+                    <FormControl>
+                      <Avatar className="mr-3">
+                        <AvatarImage src={plan.author_profile} />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                    </FormControl>
+                    <FormDescription>
+                      {/* TODO description */}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
                   <FormField
                     control={form.control}
                     name="author_description"

@@ -62,7 +62,6 @@ export default function PlanDetail() {
 
       alert('플랜이 성공적으로 저장되었습니다.');
 
-      // move to /plan
       window.location.href = '/plan';
 
     } catch (e) {
