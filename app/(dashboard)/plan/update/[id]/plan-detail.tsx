@@ -94,6 +94,12 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
     onSubmitPlan(value);
   }
 
+  const onClickActiveButton = async () => {
+    form.setValue('is_active', !plan.is_active);
+    const value = form.getValues();
+    onSubmitPlan(value);
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <div>
@@ -290,11 +296,19 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
             </div>
             <div className="flex justify-end mt-1">
               <div className="flex">
-                <Button variant={'destructive'} disabled={isLoading}>
+                <Button
+                  type="button"
+                  variant={
+                    plan.is_active
+                      ? 'destructive'
+                      : 'secondary'
+                  } disabled={isLoading}
+                  onClick={onClickActiveButton}
+                >
                   {
                     isLoading
                       ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      : '비활성화'
+                      : plan.is_active ? '비활성화' : '활성화'
                   }
                 </Button>
                 <Button className="ml-2" disabled={isLoading} type="submit">
