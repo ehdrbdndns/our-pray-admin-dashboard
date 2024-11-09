@@ -1,7 +1,7 @@
 import promisePool from "../db/db";
 import { LectureType } from "../db/type";
 
-export const retrievelectureByLectureId = async (lecture_id: string) => {
+export const retrieveLectureByLectureId = async (lecture_id: string) => {
   try {
     const [rows] = await promisePool.query<LectureType[]>(`
       SELECT * 
