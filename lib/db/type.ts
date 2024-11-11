@@ -93,6 +93,7 @@ export interface LectureAudioType extends RowDataPacket {
   file_name: string;
   audio: string;
   caption: string;
+  start_time: string;
   created_date: string;
   updated_date: string;
 }

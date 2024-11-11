@@ -1,5 +1,4 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import LectureFormModal from "./lecture-form-modal";
 
 export default function Lecture() {
   return (
@@ -10,7 +9,7 @@ export default function Lecture() {
       <TableCell className="hidden md:table-cell">2024.01.02</TableCell>
       <TableCell  >
         {/* Modal */}
-        <LectureFormModal />
+        {/* <LectureFormModal mode="update" /> */}
       </TableCell>
     </TableRow>
   )

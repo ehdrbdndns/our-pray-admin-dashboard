@@ -48,22 +48,33 @@ export const lectureFormSchema = zfd.formData({
       .max(1300, { message: '설명은 2자 이상 1300자 이하로 입력해주세요.' })
   ),
 
-  hour: zfd.numeric(),
-  minute: zfd.numeric(),
-  second: zfd.numeric(),
+  hour: zfd.numeric(
+    z.number()
+      .min(0, { message: '시간은 0 이상 23 이하로 입력해주세요.' })
+      .max(23, { message: '시간은 0 이상 23 이하로 입력해주세요.' })
+  ),
+  minute: zfd.numeric(
+    z.number()
+      .min(0, { message: '분은 0 이상 59 이하로 입력해주세요.' })
+      .max(59, { message: '분은 0 이상 59 이하로 입력해주세요.' })
+  ),
 
   bgm: zfd.file()
     .refine((file: File) => file.size < 314572800, { message: "파일 크기가 300MB 보다 작아야 합니다." }),
 
-  audioHourList: zfd.repeatableOfType(zfd.numeric()),
-  audioMinuteList: zfd.repeatableOfType(zfd.numeric()),
-  audioSecondList: zfd.repeatableOfType(zfd.numeric()),
-
-  captionList: zfd.repeatableOfType(zfd.text(z.string())),
-
+  startTimeList: zfd.repeatableOfType(zfd.text(z.string())),
+  audioNameList: zfd.repeatableOfType(
+    zfd.text(
+      z.string()
+        .refine((text: string) => text.length > 0, { message: "파일 이름을 입력해야 합니다." })
+    )
+  ),
   audioFileList: zfd.repeatableOfType(
     zfd.file()
       .refine((file: File) => file !== undefined, { message: "파일을 등록해야 합니다." })
       .refine((file: File) => file.size < 314572800, { message: "파일 크기가 300MB 보다 작아야 합니다." })
   ),
+
+  captionList: zfd.repeatableOfType(zfd.text(z.string())),
+
 })

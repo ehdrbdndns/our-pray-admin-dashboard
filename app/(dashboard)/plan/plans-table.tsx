@@ -22,6 +22,7 @@ export default function PlansTable({ plans }: { plans: PlanType[] }) {
               <TableHead className="hidden md:table-cell">활성화 여부</TableHead>
               <TableHead className="hidden md:table-cell">수정 날짜</TableHead>
               <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
+              <TableHead>강의</TableHead>
               <TableHead>수정</TableHead>
             </TableRow>
           </TableHeader>

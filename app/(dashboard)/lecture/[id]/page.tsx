@@ -1,9 +1,15 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Lecture from "./lecture";
-import LectureFormModal from "./lecture-form-modal";
+import { retrieveLecturesByPlanId } from "@/lib/serverActions/lecture";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function LecturePage() {
+export default async function LecturePage({ params }: { params: { id: string } }) {
+
+  const { id } = params;
+  const lectures = await retrieveLecturesByPlanId(id);
+
   return (
     <>
       {/* 강의 정보 */}
@@ -35,9 +41,10 @@ export default function LecturePage() {
           </CardContent>
           <CardFooter>
             {/* Create Lecture Brn */}
-            <div className="flex justify-between w-full">
-              <div></div>
-              <LectureFormModal />
+            <div className="flex justify-end w-full">
+              <Link href={`${id}/create`}>
+                <Button>강의 생성</Button>
+              </Link>
             </div>
           </CardFooter>
         </Card>
