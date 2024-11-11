@@ -48,16 +48,7 @@ export const lectureFormSchema = zfd.formData({
       .max(1300, { message: '설명은 2자 이상 1300자 이하로 입력해주세요.' })
   ),
 
-  hour: zfd.numeric(
-    z.number()
-      .min(0, { message: '시간은 0 이상 23 이하로 입력해주세요.' })
-      .max(23, { message: '시간은 0 이상 23 이하로 입력해주세요.' })
-  ),
-  minute: zfd.numeric(
-    z.number()
-      .min(0, { message: '분은 0 이상 59 이하로 입력해주세요.' })
-      .max(59, { message: '분은 0 이상 59 이하로 입력해주세요.' })
-  ),
+  minute: zfd.text(z.string()),
 
   bgm: zfd.file()
     .refine((file: File) => file.size < 314572800, { message: "파일 크기가 300MB 보다 작아야 합니다." }),

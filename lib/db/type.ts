@@ -80,7 +80,7 @@ export interface LectureType extends RowDataPacket {
   plan_id: string;
   title: string;
   description: string;
-  time: number;
+  time: string;
   bgm: string;
   is_active: boolean;
   updated_date: string;

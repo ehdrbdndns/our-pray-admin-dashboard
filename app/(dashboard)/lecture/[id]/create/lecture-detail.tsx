@@ -1,7 +1,9 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +14,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { lectureFormSchema } from "@/lib/form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod";
 import { uploadFileToS3 } from "@/lib/s3";
 
 export default function LectureDetail({ plan_id }: { plan_id: string }) {
@@ -23,17 +24,14 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
   const [audioFile, setAudioFile] = useState<File>();
   const audioFileRef = useRef<HTMLInputElement>(null);
   const [caption, setCaption] = useState('');
-  const [startHour, setStartHour] = useState(0);
-  const [startMinute, setStartMinute] = useState(0);
-  const [startSecond, setStartSecond] = useState(1);
+  const [startTime, setStartTime] = useState('');
 
   const form = useForm<z.infer<typeof lectureFormSchema>>({
     resolver: zodResolver(lectureFormSchema),
     defaultValues: {
       title: '',
       description: '',
-      hour: 0,
-      minute: 0,
+      minute: '',
       bgm: undefined,
       startTimeList: [],
       audioNameList: [],
@@ -57,9 +55,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
 
     setAudioFile(file);
   };
-  const onChangeStartHour = (e: React.ChangeEvent<HTMLInputElement>) => setStartHour(Number(e.target.value));
-  const onChangeStartMinute = (e: React.ChangeEvent<HTMLInputElement>) => setStartMinute(Number(e.target.value));
-  const onChangeStartSecond = (e: React.ChangeEvent<HTMLInputElement>) => setStartSecond(Number(e.target.value));
+  const onChangeStartTime = (e: React.ChangeEvent<HTMLInputElement>) => setStartTime(e.target.value);
 
   const onClickAddAudio = () => {
     if (!audioFile) {
@@ -77,7 +73,6 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
       return;
     }
 
-    const startTime = `${startHour}:${startMinute}:${startSecond}`;
     form.setValue('audioFileList', [...form.getValues().audioFileList, audioFile]);
     form.setValue('audioNameList', [...form.getValues().audioNameList, audioName]);
     form.setValue('captionList', [...form.getValues().captionList, caption]);
@@ -86,9 +81,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
     setAudioName('');
     setAudioFile(undefined);
     setCaption('');
-    setStartHour(0);
-    setStartMinute(0);
-    setStartSecond(1);
+    setStartTime('');
 
     if (audioFileRef.current) {
       audioFileRef.current.value = '';
@@ -116,9 +109,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
     setAudioName('');
     setAudioFile(undefined);
     setCaption('');
-    setStartHour(0);
-    setStartMinute(0);
-    setStartSecond(1);
+    setStartTime('');
 
     if (audioFileRef.current) {
       audioFileRef.current.value = '';
@@ -141,7 +132,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
       const audioList = [];
 
       for (let i = 0; i < values.audioFileList.length; i++) {
-        const audio = await uploadFileToS3(`lecture/audio/${i}`, values.audioFileList[i]);
+        const audio = await uploadFileToS3(`lecture/audio`, values.audioFileList[i]);
         audioList.push(audio);
       }
 
@@ -150,14 +141,13 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
       formData.append('title', values.title);
       formData.append('bgm', bgm);
       formData.append('description', values.description);
-      formData.append('time', `${values.hour}:${values.minute}`);
+      formData.append('time', values.minute);
 
       formData.append('audioList', JSON.stringify(audioList));
       formData.append('startTimeList', JSON.stringify(values.startTimeList));
       formData.append('audioNameList', JSON.stringify(values.audioNameList));
       formData.append('captionList', JSON.stringify(values.captionList));
 
-      // todo config fetch
       const res = await fetch('/api/lecture', {
         method: 'POST',
         body: formData
@@ -234,54 +224,14 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
                     </FormItem>
                   )}
                 />
-                <div>
-                  <Label>총 기도 시간</Label>
-                  <div className="flex">
-                    <FormField
-                      control={form.control}
-                      name="hour"
-                      render={({ field }) => (
-                        <FormItem className="mr-2">
-                          <FormLabel>시</FormLabel>
-                          <FormControl>
-                            <Input placeholder="00" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            {/* TODO description */}
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="minute"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>분</FormLabel>
-                          <FormControl>
-                            <Input placeholder="00" {...field} />
-                          </FormControl>
-                          <FormDescription>
-                            {/* TODO description */}
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* 강의 설명 */}
-              <div className="w-full">
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="minute"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>설명</FormLabel>
+                      <FormLabel>기도 분량(분 단위)</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="설명을 입력하세요" {...field} />
+                        <Input placeholder="00" {...field} />
                       </FormControl>
                       <FormDescription>
                         {/* TODO description */}
@@ -291,6 +241,25 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
                   )}
                 />
               </div>
+            </div>
+            {/* 강의 설명 */}
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>설명</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="설명을 입력하세요" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      {/* TODO description */}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </CardContent>
         </Card>
@@ -305,7 +274,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
               <TableHeader>
                 <TableRow>
                   <TableHead>파일 제목</TableHead>
-                  <TableHead className="hidden md:table-cell">시작 시간</TableHead>
+                  <TableHead className="hidden md:table-cell">시작 시간(분 단위)</TableHead>
                   <TableHead>오디오</TableHead>
                   <TableHead>자막</TableHead>
                   <TableHead>삭제</TableHead>
@@ -347,17 +316,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
                     <Input placeholder="파일 제목을 입력하세요" value={audioName} onChange={onChangeAudioName} />
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    <div className="flex flex-col gap-5">
-                      <div className="flex items-center gap-2">
-                        <Input placeholder="00" type="number" value={startHour} onChange={onChangeStartHour} /> {"시"}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Input placeholder="00" type="number" value={startMinute} onChange={onChangeStartMinute} /> {"분"}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Input placeholder="00" type="number" value={startSecond} onChange={onChangeStartSecond} /> {"초"}
-                      </div>
-                    </div>
+                    <Input placeholder="분" value={startTime} onChange={onChangeStartTime} />
                   </TableCell>
                   <TableCell>
                     <Input type="file" accept="audio/*" onChange={onChangeAudioFile} ref={audioFileRef} />
@@ -374,9 +333,15 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
           </CardContent>
         </Card>
         <div className="w-full flex justify-end mt-5">
-          <Button type="submit">강의 생성</Button>
+          <Button type="submit">
+            {
+              isLoading
+                ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                : '강의 생성'
+            }
+          </Button>
         </div>
       </form>
-    </Form>
+    </Form >
   )
 }
