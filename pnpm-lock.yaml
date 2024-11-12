@@ -50,9 +50,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@19.0.0-rc.0(react@19.0.0-rc.0))(react@19.0.0-rc.0)
-      '@types/node':
-        specifier: 20.14.10
-        version: 20.14.10
       '@types/react':
         specifier: 18.3.3
         version: 18.3.3
@@ -76,16 +73,16 @@ importers:
         version: 0.22.8
       drizzle-orm:
         specifier: ^0.31.2
-        version: 0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.3)(react@19.0.0-rc.0)
+        version: 0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.4)(react@19.0.0-rc.0)
       drizzle-zod:
         specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.3)(react@19.0.0-rc.0))(zod@3.23.8)
+        version: 0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.4)(react@19.0.0-rc.0))(zod@3.23.8)
       lucide-react:
         specifier: ^0.400.0
         version: 0.400.0(react@19.0.0-rc.0)
       mysql2:
-        specifier: ^3.11.3
-        version: 3.11.3
+        specifier: ^3.11.4
+        version: 3.11.4
       next:
         specifier: 15.0.0-canary.75
         version: 15.0.0-canary.75(react-dom@19.0.0-rc.0(react@19.0.0-rc.0))(react@19.0.0-rc.0)
@@ -135,6 +132,9 @@ importers:
       '@types/mysql':
         specifier: ^2.15.26
         version: 2.15.26
+      '@types/node':
+        specifier: 20.14.10
+        version: 20.14.10
 
 packages:
 
@@ -1987,8 +1987,8 @@ packages:
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
-  mysql2@3.11.3:
-    resolution: {integrity: sha512-Qpu2ADfbKzyLdwC/5d4W7+5Yz7yBzCU05YWt5npWzACST37wJsB23wgOSo00qi043urkiRwXtEvJc9UnuLX/MQ==}
+  mysql2@3.11.4:
+    resolution: {integrity: sha512-Z2o3tY4Z8EvSRDwknaC40MdZ3+m0sKbpnXrShQLdxPrAvcNli7jLrD2Zd2IzsRMw4eK9Yle500FDmlkIqp+krg==}
     engines: {node: '>= 8.0'}
 
   mz@2.7.0:
@@ -4287,17 +4287,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.3)(react@19.0.0-rc.0):
+  drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.4)(react@19.0.0-rc.0):
     optionalDependencies:
       '@neondatabase/serverless': 0.9.4
       '@types/pg': 8.11.6
       '@types/react': 18.3.3
-      mysql2: 3.11.3
+      mysql2: 3.11.4
       react: 19.0.0-rc.0
 
-  drizzle-zod@0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.3)(react@19.0.0-rc.0))(zod@3.23.8):
+  drizzle-zod@0.5.1(drizzle-orm@0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.4)(react@19.0.0-rc.0))(zod@3.23.8):
     dependencies:
-      drizzle-orm: 0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.3)(react@19.0.0-rc.0)
+      drizzle-orm: 0.31.4(@neondatabase/serverless@0.9.4)(@types/pg@8.11.6)(@types/react@18.3.3)(mysql2@3.11.4)(react@19.0.0-rc.0)
       zod: 3.23.8
 
   eastasianwidth@0.2.0: {}
@@ -4515,7 +4515,7 @@ snapshots:
 
   ms@2.1.2: {}
 
-  mysql2@3.11.3:
+  mysql2@3.11.4:
     dependencies:
       aws-ssl-profiles: 1.1.2
       denque: 2.1.0

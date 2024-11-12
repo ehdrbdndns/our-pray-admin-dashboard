@@ -1,3 +1,4 @@
+import { PoolConnection } from "mysql2/promise";
 import promisePool from "../db/db";
 import { LectureAudioType, LectureType } from "../db/type";
 
@@ -16,20 +17,20 @@ export const retrieveLecturesByPlanId = async (plan_id: string) => {
   }
 }
 
-export const insertOrUpdateLecture = async (lecture: LectureType) => {
+export const insertOrUpdateLectureFromConn = async (conn: PoolConnection, lecture: LectureType) => {
   try {
-    const { plan_id, title, description, time, bgm, is_active } = lecture;
+    const { lecture_id, plan_id, title, description, time, bgm, is_active } = lecture;
 
-    const [rows]: any = await promisePool.query<LectureType[]>(`
-      INSERT INTO lecture (plan_id, title, description, time, bgm, is_active)
-      VALUES (?, ?, ?, ?, ?, ?)
+    const [rows]: any = await conn.execute(`
+      INSERT INTO lecture (lecture_id, plan_id, title, description, time, bgm, is_active)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
         description = VALUES(description),
         time = VALUES(time),
         bgm = VALUES(bgm),
         is_active = VALUES(is_active)
-    `, [plan_id, title, description, time, bgm, is_active]);
+    `, [lecture_id, plan_id, title, description, time, bgm, is_active]);
 
     return rows;
   } catch (e) {
@@ -38,21 +39,27 @@ export const insertOrUpdateLecture = async (lecture: LectureType) => {
   }
 }
 
-export const insertOrUpdateLectureAudio = async (lectureAudioList: LectureAudioType[]) => {
+export const insertOrUpdateAudioFromConn = async (conn: PoolConnection, lectureAudioList: LectureAudioType[]) => {
   try {
-    const [rows]: any = await promisePool.query<LectureAudioType[]>(`
+    const values = lectureAudioList.map((audio) => [
+      audio.lecture_audio_id,
+      audio.lecture_id,
+      audio.file_name,
+      audio.audio,
+      audio.caption,
+      audio.start_time
+    ])
+
+    const [rows]: any = await conn.query(`
       INSERT INTO lecture_audio 
-      
       (lecture_audio_id, lecture_id, file_name, audio, caption, start_time)
-
       VALUES ?
-
       ON DUPLICATE KEY UPDATE
         file_name = VALUES(file_name),
         audio = VALUES(audio),
         caption = VALUES(caption),
         start_time = VALUES(start_time)
-    `, [lectureAudioList]);
+    `, [values]);
 
     return rows;
   } catch (e) {

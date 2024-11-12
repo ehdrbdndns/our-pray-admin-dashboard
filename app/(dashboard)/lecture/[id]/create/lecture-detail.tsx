@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { lectureFormSchema } from "@/lib/form";
@@ -119,9 +118,10 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
   }
 
   const onSubmitLecture = async (values: z.infer<typeof lectureFormSchema>) => {
-    if (!window.confirm('강의를 생성하시겠습니까?')) {
-      return;
-    }
+
+    // if (!window.confirm('강의를 생성하시겠습니까?')) {
+    //   return;
+    // }
 
     setIsLoading(true);
 
