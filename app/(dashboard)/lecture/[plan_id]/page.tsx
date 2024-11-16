@@ -4,11 +4,12 @@ import Lecture from "./lecture";
 import { retrieveLecturesByPlanId } from "@/lib/serverActions/lecture";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { LectureType } from "@/lib/db/type";
 
-export default async function LecturePage({ params }: { params: { id: string } }) {
+export default async function LecturePage({ params }: { params: { plan_id: string } }) {
 
-  const { id } = params;
-  const lectures = await retrieveLecturesByPlanId(id);
+  const { plan_id } = params;
+  const lectures = await retrieveLecturesByPlanId(plan_id) as LectureType[];
 
   return (
     <>
@@ -23,26 +24,25 @@ export default async function LecturePage({ params }: { params: { id: string } }
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="hidden md:table-cell">ID</TableHead>
                   <TableHead>강의 제목</TableHead>
-                  <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
+                  <TableHead className="hidden md:table-cell">강의 시간</TableHead>
+                  <TableHead className="hidden md:table-cell">활성화</TableHead>
                   <TableHead className="hidden md:table-cell">수정 날짜</TableHead>
                   <TableHead>수정</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {/* Content */}
-                <Lecture />
-                <Lecture />
-                <Lecture />
-                <Lecture />
+                {lectures.map((lecture) => (
+                  <Lecture key={lecture.lecture_id} lecture={lecture} />
+                ))}
               </TableBody>
             </Table>
           </CardContent>
           <CardFooter>
             {/* Create Lecture Brn */}
             <div className="flex justify-end w-full">
-              <Link href={`${id}/create`}>
+              <Link href={`${plan_id}/create`}>
                 <Button>강의 생성</Button>
               </Link>
             </div>

@@ -119,16 +119,21 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
 
   const onSubmitLecture = async (values: z.infer<typeof lectureFormSchema>) => {
 
-    // if (!window.confirm('강의를 생성하시겠습니까?')) {
-    //   return;
-    // }
+    if (!window.confirm('강의를 생성하시겠습니까?')) {
+      return;
+    }
 
     setIsLoading(true);
 
     const formData = new FormData();
 
     try {
-      const bgm = await uploadFileToS3('lecture/bgm', values.bgm);
+
+      let bgm = null;
+      if (values.bgm !== null) {
+        bgm = await uploadFileToS3('lecture/bgm', values.bgm);
+      }
+
       const audioList = [];
 
       for (let i = 0; i < values.audioFileList.length; i++) {
@@ -139,7 +144,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
       formData.append('plan_id', plan_id);
 
       formData.append('title', values.title);
-      formData.append('bgm', bgm);
+      formData.append('bgm', bgm || '');
       formData.append('description', values.description);
       formData.append('time', values.minute);
 

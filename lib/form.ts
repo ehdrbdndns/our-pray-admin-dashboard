@@ -48,11 +48,19 @@ export const lectureFormSchema = zfd.formData({
       .max(1300, { message: '설명은 2자 이상 1300자 이하로 입력해주세요.' })
   ),
 
+  is_active: z.boolean(),
+
   minute: zfd.text(z.string()),
 
   bgm: zfd.file()
-    .refine((file: File) => file.size < 314572800, { message: "파일 크기가 300MB 보다 작아야 합니다." }),
+    .nullable()
+    .refine((file: File | null) => {
+      if (!file) return true;
+      return file.size < 314572800;
+    }, { message: "파일 크기가 300MB 보다 작아야 합니다." }),
 
+  audioTypeList: zfd.repeatableOfType(zfd.text(z.string())),
+  audioIdList: zfd.repeatableOfType(zfd.text(z.string())),
   startTimeList: zfd.repeatableOfType(zfd.text(z.string())),
   audioNameList: zfd.repeatableOfType(
     zfd.text(
@@ -62,10 +70,8 @@ export const lectureFormSchema = zfd.formData({
   ),
   audioFileList: zfd.repeatableOfType(
     zfd.file()
-      .refine((file: File) => file !== undefined, { message: "파일을 등록해야 합니다." })
       .refine((file: File) => file.size < 314572800, { message: "파일 크기가 300MB 보다 작아야 합니다." })
   ),
 
   captionList: zfd.repeatableOfType(zfd.text(z.string())),
-
 })
