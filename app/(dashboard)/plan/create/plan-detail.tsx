@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { createPlanFormSchema } from "@/lib/form";
+import { planFormSchema } from "@/lib/form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { uploadFileToS3 } from "@/lib/s3";
@@ -18,8 +18,8 @@ export default function PlanDetail() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof createPlanFormSchema>>({
-    resolver: zodResolver(createPlanFormSchema),
+  const form = useForm<z.infer<typeof planFormSchema>>({
+    resolver: zodResolver(planFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -29,7 +29,7 @@ export default function PlanDetail() {
     }
   })
 
-  const onSubmitPlan = async (values: z.infer<typeof createPlanFormSchema>) => {
+  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
     setIsLoading(true);
 
     const formData = new FormData();

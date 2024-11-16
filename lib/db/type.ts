@@ -74,3 +74,29 @@ export interface PlanType extends RowDataPacket {
   updated_date: string;
   created_date: string;
 }
+
+export interface LectureType extends RowDataPacket {
+  lecture_id: string;
+  plan_id: string;
+  title: string;
+  description: string;
+  time: string;
+  bgmFile: File;
+  bgm: string;
+  is_active: boolean;
+  updated_date: string;
+  created_date: string;
+}
+
+export interface LectureAudioType extends RowDataPacket {
+  lecture_audio_id: string;
+  lecture_id: string;
+  file_name: string;
+  audioFile: File;
+  audio: string;
+  caption: string;
+  is_active: boolean;
+  start_time: string;
+  created_date: string;
+  updated_date: string;
+}

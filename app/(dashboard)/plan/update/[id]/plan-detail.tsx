@@ -10,7 +10,7 @@ import { PlanType } from "@/lib/db/type";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { updatePlanFormSchema } from "@/lib/form";
+import { planFormSchema } from "@/lib/form";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { uploadFileToS3 } from "@/lib/s3";
@@ -21,8 +21,8 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof updatePlanFormSchema>>({
-    resolver: zodResolver(updatePlanFormSchema),
+  const form = useForm<z.infer<typeof planFormSchema>>({
+    resolver: zodResolver(planFormSchema),
     defaultValues: {
       title: plan.title,
       description: plan.description,
@@ -32,7 +32,7 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
     }
   })
 
-  const onSubmitPlan = async (values: z.infer<typeof updatePlanFormSchema>) => {
+  const onSubmitPlan = async (values: z.infer<typeof planFormSchema>) => {
     setIsLoading(true);
 
     const formData = new FormData();

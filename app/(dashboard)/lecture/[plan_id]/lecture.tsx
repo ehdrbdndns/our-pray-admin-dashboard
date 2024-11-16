@@ -1,16 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { PlanType } from "@/lib/db/type";
+import { LectureType } from "@/lib/db/type";
 import { getFullDateFromDate } from "@/lib/utils";
 import Link from "next/link";
 
-export default function Plan({ plan }: { plan: PlanType }) {
-  const { plan_id, title, updated_date, created_date, is_active } = plan;
+export default function Lecture({ lecture }: { lecture: LectureType }) {
+  const { lecture_id, plan_id, title, time, is_active, updated_date } = lecture;
 
   return (
     <TableRow>
       <TableCell className="font-medium">{title}</TableCell>
+      <TableCell className="hidden md:table-cell">{time} 분</TableCell>
       <TableCell className="hidden md:table-cell">
         {
           is_active
@@ -25,21 +26,9 @@ export default function Plan({ plan }: { plan: PlanType }) {
         }
       </TableCell>
       <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(updated_date))}</TableCell>
-      <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(created_date))}</TableCell>
       <TableCell>
-        {/* Button */}
-        <Link href={`/lecture/${plan_id}`}>
-          <Button>
-            등록
-          </Button>
-        </Link>
-      </TableCell>
-      <TableCell>
-        {/* Button */}
-        <Link href={`/plan/update/${plan_id}`}>
-          <Button>
-            수정
-          </Button>
+        <Link href={`${plan_id}/update/${lecture_id}`}>
+          <Button>수정</Button>
         </Link>
       </TableCell>
     </TableRow>
