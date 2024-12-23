@@ -118,17 +118,11 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
   }
 
   const onSubmitLecture = async (values: z.infer<typeof lectureFormSchema>) => {
-
-    if (!window.confirm('강의를 생성하시겠습니까?')) {
-      return;
-    }
-
     setIsLoading(true);
 
     const formData = new FormData();
 
     try {
-
       let bgm = null;
       if (values.bgm !== null) {
         bgm = await uploadFileToS3('lecture/bgm', values.bgm);
@@ -177,9 +171,17 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
     setIsLoading(false);
   }
 
+  const onClickSubmitBtn = () => {
+    if (!window.confirm('강의를 수정하시겠습니까?')) {
+      return;
+    }
+
+    const values = form.getValues();
+    onSubmitLecture(values);
+  }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmitLecture)}>
+      <form onSubmit={(e) => e.preventDefault()}>
         {/* 강의 기본 설정 */}
         <Card>
           <CardHeader>
@@ -338,7 +340,7 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
           </CardContent>
         </Card>
         <div className="w-full flex justify-end mt-5">
-          <Button type="submit">
+          <Button onClick={onClickSubmitBtn} type="submit">
             {
               isLoading
                 ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
