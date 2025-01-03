@@ -18,8 +18,6 @@ export const getAllQuestions = async () => {
       ORDER BY question.updated_date DESC
     `);
 
-    console.log('GET all questions:', rows);
-
     return rows;
   } catch (e) {
     console.error(e);

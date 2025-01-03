@@ -1,10 +1,39 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import QuestionTable from "./question-table"
-import { getAllQuestions } from "@/lib/serverActions/question"
+import { useEffect, useState } from "react"
+import { QuestionType } from "@/lib/db/type"
 
-export default async function QuestionPage() {
+export default function QuestionPage() {
 
-  const questions = await getAllQuestions();
+  const [questions, setQuestions] = useState<QuestionType[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch('/api/question', {
+          method: 'GET'
+        })
+
+        const questions = await res.json();
+
+        setQuestions(questions);
+      } catch (e) {
+        console.error(e);
+        alert('문의사항을 가져오는데 실패했습니다. 관리자에게 문의하세요.');
+      }
+
+      setIsLoading(false);
+    }
+
+    fetchQuestions();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
