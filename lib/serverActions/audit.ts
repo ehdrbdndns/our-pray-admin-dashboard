@@ -1,6 +1,6 @@
 import { PoolConnection } from "mysql2/promise";
 
-export function insertOrUpdateAuditByConn({
+export async function insertOrUpdateAuditByConn({
   conn,
   plan_lecture_audit_id,
   plan_id
@@ -12,7 +12,7 @@ export function insertOrUpdateAuditByConn({
   try {
 
     if (!plan_lecture_audit_id) {
-      const [rows]: any = conn.query(`
+      const [rows]: any = await conn.query(`
       UPDATE plan_lecture_audit
       SET
         UPDATED_DATE = NOW()
@@ -22,7 +22,7 @@ export function insertOrUpdateAuditByConn({
 
       return rows;
     } else {
-      const [rows]: any = conn.query(`
+      const [rows]: any = await conn.query(`
       INSERT INTO plan_lecture_audit
         (plan_lecture_audit_id, plan_id)
       VALUES
