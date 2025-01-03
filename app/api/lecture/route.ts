@@ -1,5 +1,6 @@
 import promisePool from "@/lib/db/db";
 import { LectureAudioType, LectureType } from "@/lib/db/type";
+import { insertOrUpdateAuditByConn } from "@/lib/serverActions/audit";
 import { hasSession } from "@/lib/serverActions/auth";
 import { deleteAudioListByAudioIdFromConn, insertOrUpdateAudioFromConn, insertOrUpdateLectureFromConn } from "@/lib/serverActions/lecture";
 import { createUniqId } from "@/lib/utils";
@@ -77,6 +78,16 @@ export async function POST(req: NextRequest) {
         console.error("affectedRows is 0 of audio");
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
       }
+    }
+
+    // update plan lecture audit
+    const { affectedRows } = await insertOrUpdateAuditByConn({
+      conn, plan_id: lecture.plan_id
+    }) as { affectedRows: number };
+
+    if (affectedRows === 0) {
+      console.error("affectedRows is 0 of audit");
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 
     // transaction commit
@@ -179,6 +190,16 @@ export async function PATCH(req: NextRequest) {
         console.error("affectedRows is 0 of delete audio");
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
       }
+    }
+
+    // update plan lecture audit
+    const { affectedRows } = await insertOrUpdateAuditByConn({
+      conn, plan_id: lecture.plan_id
+    }) as { affectedRows: number };
+
+    if (affectedRows === 0) {
+      console.error("affectedRows is 0 of audit");
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 
     // transaction commit
