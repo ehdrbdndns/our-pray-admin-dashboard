@@ -19,7 +19,7 @@ export default function QuestionPage() {
 
         const questions = await res.json();
 
-        setQuestions(questions);
+        setQuestions(questions.filter((row: any) => row.is_active));
       } catch (e) {
         console.error(e);
         alert('문의사항을 가져오는데 실패했습니다. 관리자에게 문의하세요.');
