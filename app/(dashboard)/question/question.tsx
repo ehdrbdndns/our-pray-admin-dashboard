@@ -11,7 +11,9 @@ export default function Question({ question }: { question: QuestionType }) {
   return (
     <TableRow>
       <TableCell className="font-medium">{user_name}</TableCell>
-      <TableCell className="font-medium">{content}</TableCell>
+      <TableCell className="font-medium">
+        {content.length > 100 ? `${content.substring(0, 100)}...` : content}
+      </TableCell>
       <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(updated_date))}</TableCell>
       <TableCell className="font-medium">
         <Badge variant="default" className="capitalize">

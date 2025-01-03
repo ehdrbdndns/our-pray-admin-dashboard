@@ -17,7 +17,7 @@ export default function QuestionTable({ questions }: { questions: QuestionType[]
           <TableHeader>
             <TableRow>
               <TableHead>질문자</TableHead>
-              <TableHead className="hidden md:table-cell">내용</TableHead>
+              <TableHead className="hidden md:table-cell w-[40%]">내용</TableHead>
               <TableHead className="hidden md:table-cell">생성 날짜</TableHead>
               <TableHead>답변상태</TableHead>
               <TableHead>보기</TableHead>

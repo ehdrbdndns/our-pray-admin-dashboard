@@ -12,8 +12,13 @@ export const getAllQuestions = async () => {
       
       FROM question
 
-      LEFT JOIN user ON question.user_id = user.user_id
+        LEFT JOIN user 
+          ON question.user_id = user.user_id
+
+      ORDER BY question.updated_date DESC
     `);
+
+    console.log('GET all questions:', rows);
 
     return rows;
   } catch (e) {
