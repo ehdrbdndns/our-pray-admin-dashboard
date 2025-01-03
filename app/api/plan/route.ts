@@ -1,6 +1,8 @@
+import promisePool from "@/lib/db/db";
 import { PlanType } from "@/lib/db/type";
+import { insertOrUpdateAuditByConn } from "@/lib/serverActions/audit";
 import { hasSession } from "@/lib/serverActions/auth";
-import { getAllPlans, insertOrUpdatePlan } from "@/lib/serverActions/plan";
+import { getAllPlans, insertOrUpdatePlan, insertOrUpdatePlanByConn } from "@/lib/serverActions/plan";
 import { createUniqId } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -25,6 +27,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   console.log("post plan detail");
+
+  const conn = await promisePool.getConnection();
 
   try {
     const session = await hasSession();
@@ -55,25 +59,43 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Bad request' }, { status: 400 });
     }
 
+    // start transaction
+    await conn.beginTransaction();
+
     const plan_id = createUniqId();
     const newPlan = { ...plan, plan_id };
 
-    const { affectedRows } = await insertOrUpdatePlan(newPlan) as { affectedRows: number };
+    const { affectedRows: affectedPlanRows } = await insertOrUpdatePlanByConn(conn, newPlan) as { affectedRows: number };
 
-    if (affectedRows === 0) {
-      return NextResponse.json({ error: "Failed to insert" }, { status: 500 });
+    if (affectedPlanRows === 0) {
+      return NextResponse.json({ error: "Failed to insert plan" }, { status: 500 });
     }
+
+    const plan_lecture_audit_id = createUniqId();
+
+    const { affectedRows: affectedAuditRows } = await insertOrUpdateAuditByConn({
+      conn, plan_lecture_audit_id, plan_id
+    }) as { affectedRows: number };
+
+    if (affectedAuditRows === 0) {
+      return NextResponse.json({ error: "Failed to insert audit" }, { status: 500 });
+    }
+
+    await conn.commit();
 
     return NextResponse.json({ plan_id }, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } finally {
+    conn.release();
   }
 }
 
 export async function PUT(req: NextRequest) {
   console.log("put plan detail");
 
+  const conn = await promisePool.getConnection();
   try {
     const session = await hasSession();
 
@@ -104,15 +126,29 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Bad request' }, { status: 400 });
     }
 
-    const { affectedRows } = await insertOrUpdatePlan(plan) as { affectedRows: number };
+    await conn.beginTransaction();
+
+    const { affectedRows } = await insertOrUpdatePlanByConn(conn, plan) as { affectedRows: number };
 
     if (affectedRows === 0) {
       return NextResponse.json({ error: "Failed to update" }, { status: 500 });
     }
 
+    const { affectedRows: affectedAuditRows } = await insertOrUpdateAuditByConn({
+      conn, plan_id: plan.plan_id
+    }) as { affectedRows: number };
+
+    if (affectedAuditRows === 0) {
+      return NextResponse.json({ error: "Failed to insert audit" }, { status: 500 });
+    }
+
+    await conn.commit();
+
     return NextResponse.json({ plan_id: plan.plan_id }, { status: 200 });
   } catch (e) {
     console.error(e)
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } finally {
+    conn.release();
   }
 }
