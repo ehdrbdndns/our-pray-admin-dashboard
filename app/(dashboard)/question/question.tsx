@@ -16,7 +16,7 @@ export default function Question({ question }: { question: QuestionType }) {
       </TableCell>
       <TableCell className="hidden md:table-cell">{getFullDateFromDate(new Date(updated_date))}</TableCell>
       <TableCell className="font-medium">
-        <Badge variant="default" className="capitalize">
+        <Badge variant={is_answered ? 'default' : 'destructive'} className="capitalize">
           {is_answered ? '답변완료' : '답변대기'}
         </Badge>
       </TableCell>
