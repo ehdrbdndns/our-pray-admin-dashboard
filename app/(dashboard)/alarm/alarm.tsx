@@ -26,7 +26,7 @@ export default function Alarm({ alarm }: { alarm: AlarmType }) {
         }
       </TableCell>
       <TableCell>
-        <AlarmSendModal />
+        <AlarmSendModal alarm={alarm} />
       </TableCell>
       <TableCell>
         <AlarmFromModal alarm={alarm} mode="update" />
