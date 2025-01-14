@@ -1,3 +1,4 @@
+import { PoolConnection } from "mysql2/promise";
 import promisePool from "../db/db";
 import { ReplyType } from "../db/type";
 
@@ -32,6 +33,27 @@ export const insertOrUpdateReply = async (reply: ReplyType) => {
 
   try {
     const [rows]: any = await promisePool.query(`
+      INSERT INTO question_reply 
+        (question_reply_id, question_id, user_id, content, is_active, is_replier)
+      VALUES 
+        (?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        content = ?,
+        updated_date = NOW()
+    `, [question_reply_id, question_id, user_id, content, is_active, is_replier, content]);
+
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw new Error('답변을 저장하는데 실패했습니다.');
+  }
+}
+
+export const insertOrUpdateReplyFromConn = async (conn: PoolConnection, reply: ReplyType) => {
+  const { question_reply_id, question_id, user_id, content, is_active, is_replier } = reply;
+
+  try {
+    const [rows]: any = await conn.query(`
       INSERT INTO question_reply 
         (question_reply_id, question_id, user_id, content, is_active, is_replier)
       VALUES 
