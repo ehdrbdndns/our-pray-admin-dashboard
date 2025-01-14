@@ -1,3 +1,4 @@
+import { PoolConnection } from "mysql2/promise";
 import promisePool from "../db/db";
 import { QuestionType } from "../db/type";
 
@@ -47,5 +48,20 @@ export const retrieveQuestionById = async (questionId: string) => {
   } catch (e) {
     console.error(e);
     throw new Error('질문을 불러오는데 실패했습니다.');
+  }
+}
+
+export const markQuestionAsAnsweredFromConn = async (conn: PoolConnection, questionId: string) => {
+  try {
+    const [rows]: any = await conn.query(`
+      UPDATE question
+      SET is_answered = true, updated_date = NOW()
+      WHERE question_id = ?
+    `, [questionId]);
+
+    return rows;
+  } catch (e) {
+    console.error(e);
+    throw new Error('질문을 답변 완료로 변경하는데 실패했습니다.');
   }
 }

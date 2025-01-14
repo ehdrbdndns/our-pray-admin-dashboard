@@ -30,6 +30,7 @@
     "drizzle-kit": "^0.22.8",
     "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
+    "expo-server-sdk": "^3.13.0",
     "lucide-react": "^0.400.0",
     "mysql2": "^3.11.4",
     "next": "15.0.0-canary.75",

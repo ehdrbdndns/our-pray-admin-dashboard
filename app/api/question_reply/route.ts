@@ -1,9 +1,12 @@
+import promisePool from "@/lib/db/db";
 import { ReplyType } from "@/lib/db/type";
 import { hasSession } from "@/lib/serverActions/auth";
-import { retrieveQuestionById } from "@/lib/serverActions/question";
-import { deleteReply, insertOrUpdateReply, retrieveRepliesByQuestionId } from "@/lib/serverActions/question-reply";
+import { markQuestionAsAnsweredFromConn, retrieveQuestionById } from "@/lib/serverActions/question";
+import { deleteReply, insertOrUpdateReply, insertOrUpdateReplyFromConn, retrieveRepliesByQuestionId } from "@/lib/serverActions/question-reply";
 import { createUniqId, XSSFilter } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
+import { retrieveUserExpoTokenByQuestionIdFromConn } from "@/lib/serverActions/user";
+import { pushNotification } from "@/lib/notification";
 
 export async function GET(req: NextRequest) {
   try {
@@ -48,37 +51,66 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  console.log("insert or update question reply");
+
+  const session = await hasSession();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = await req.json();
+  let reply = body as ReplyType;
+
+  if (!reply.question_id || !reply.user_id || !reply.content || !reply.is_replier) {
+    return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
+  }
+
+  const conn = await promisePool.getConnection();
+
   try {
-    console.log("insert or update question reply");
-
-    const session = await hasSession();
-
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const body = await req.json();
-    let reply = body as ReplyType;
-
-    if (!reply.question_id || !reply.user_id || !reply.content || !reply.is_replier) {
-      return NextResponse.json({ error: 'Bad Request' }, { status: 400 });
-    }
-
+    await conn.beginTransaction();
     const reply_id = createUniqId();
     reply.question_reply_id = reply_id;
 
     reply.content = XSSFilter(reply.content);
 
-    const rows = await insertOrUpdateReply(reply);
+    const insertReplyRows = await insertOrUpdateReplyFromConn(conn, reply);
 
-    if (rows.affectedRows === 0) {
+    if (insertReplyRows.affectedRows === 0) {
       return NextResponse.json({ error: 'Failed to save reply' }, { status: 500 });
     }
+
+    // mark question as answered
+    const markQuestionRows = await markQuestionAsAnsweredFromConn(conn, reply.question_id);
+
+    if (markQuestionRows.affectedRows === 0) {
+      return NextResponse.json({ error: 'Failed to mark question as answered' }, { status: 500 });
+    }
+
+    // retrieve user expo token
+    const expoPushToken = await retrieveUserExpoTokenByQuestionIdFromConn(conn, reply.question_id);
+
+    // send notification to user
+    await pushNotification({
+      pushTokens: [expoPushToken],
+      body: '',
+      title: '',
+      subtitle: '궁금했던 답변이 도착했어요!',
+      data: {},
+      sound: 'default',
+      badge: 0,
+    })
+
+    await conn.commit();
 
     return NextResponse.json({ reply }, { status: 200 });
   } catch (e) {
     console.error(e)
+    await conn.rollback();
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } finally {
+    conn.release();
   }
 }
 
