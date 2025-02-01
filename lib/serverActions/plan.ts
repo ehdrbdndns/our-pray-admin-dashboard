@@ -44,13 +44,13 @@ export async function insertOrUpdatePlan(plan: PlanType) {
         (
           plan_id, title, description
           , author_name, author_description, author_profile
-          , is_active, thumbnail, s_thumbnail, type
+          , is_active, thumbnail, s_thumbnail, type, author_deeplink
         )
       VALUES 
         (
           ?, ?, ?
           , ?, ?, ?
-          , ?, ?, ?, "free"
+          , ?, ?, ?, "free", "https://www.youtube.com/@TV-xe6vi"
         )
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
@@ -87,13 +87,13 @@ export async function insertOrUpdatePlanByConn(conn: PoolConnection, plan: PlanT
         (
           plan_id, title, description
           , author_name, author_description, author_profile
-          , is_active, thumbnail, s_thumbnail, type
+          , is_active, thumbnail, s_thumbnail, type, author_deeplink
         )
       VALUES 
         (
           ?, ?, ?
           , ?, ?, ?
-          , ?, ?, ?, "free"
+          , ?, ?, ?, "free", "https://www.youtube.com/@TV-xe6vi"
         )
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
