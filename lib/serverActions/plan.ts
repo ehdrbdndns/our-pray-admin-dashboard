@@ -41,9 +41,17 @@ export async function insertOrUpdatePlan(plan: PlanType) {
 
     const [rows]: any = await promisePool.query(`
       INSERT INTO plan 
-        (plan_id, title, description, author_name, author_description, author_profile, is_active, thumbnail, s_thumbnail)
+        (
+          plan_id, title, description
+          , author_name, author_description, author_profile
+          , is_active, thumbnail, s_thumbnail, type, author_deeplink
+        )
       VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (
+          ?, ?, ?
+          , ?, ?, ?
+          , ?, ?, ?, "free", "https://www.youtube.com/@TV-xe6vi"
+        )
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
         description = VALUES(description),
@@ -76,9 +84,17 @@ export async function insertOrUpdatePlanByConn(conn: PoolConnection, plan: PlanT
   try {
     const [rows]: any = await conn.query(`
       INSERT INTO plan 
-        (plan_id, title, description, author_name, author_description, author_profile, is_active, thumbnail, s_thumbnail)
+        (
+          plan_id, title, description
+          , author_name, author_description, author_profile
+          , is_active, thumbnail, s_thumbnail, type, author_deeplink
+        )
       VALUES 
-        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (
+          ?, ?, ?
+          , ?, ?, ?
+          , ?, ?, ?, "free", "https://www.youtube.com/@TV-xe6vi"
+        )
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
         description = VALUES(description),
