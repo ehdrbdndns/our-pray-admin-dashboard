@@ -23,6 +23,7 @@ export const retrieveLecturesByPlanId = async (plan_id: string) => {
       SELECT * 
       FROM lecture 
       WHERE plan_id = ?
+
     `, [plan_id]);
 
     return rows;
@@ -93,7 +94,8 @@ export const retrieveAudioByLectureId = async (lecture_id: string) => {
       SELECT * 
       FROM lecture_audio 
       WHERE lecture_id = ?
-       AND is_active = 1
+        AND is_active = 1
+      ORDER BY start_time ASC
     `, [lecture_id]);
 
     return rows;

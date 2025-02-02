@@ -363,7 +363,9 @@ export default function LectureDetail({
                       </TableCell>
                       <TableCell>
                         {/* TODO dialog for caption */}
-                        {caption}
+                        <pre>
+                          {caption}
+                        </pre>
                       </TableCell>
                       <TableCell>
                         <Button

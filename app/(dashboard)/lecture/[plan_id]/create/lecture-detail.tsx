@@ -304,7 +304,9 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
                       </TableCell>
                       <TableCell>
                         {/* TODO dialog for caption */}
-                        {caption}
+                        <pre>
+                          {caption}
+                        </pre>
                       </TableCell>
                       <TableCell>
                         <Button
