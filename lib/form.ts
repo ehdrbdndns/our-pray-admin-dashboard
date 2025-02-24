@@ -59,6 +59,8 @@ export const lectureFormSchema = zfd.formData({
       return file.size < 314572800;
     }, { message: "파일 크기가 300MB 보다 작아야 합니다." }),
 
+  bgmExtension: zfd.text(z.string()),
+
   audioTypeList: zfd.repeatableOfType(zfd.text(z.string())),
   audioIdList: zfd.repeatableOfType(zfd.text(z.string())),
   startTimeList: zfd.repeatableOfType(zfd.text(z.string())),

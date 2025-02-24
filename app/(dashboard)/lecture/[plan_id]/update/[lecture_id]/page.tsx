@@ -14,6 +14,7 @@ export default function LectureDetailPage({ params }: { params: { plan_id: strin
     description: '',
     time: '',
     bgm: '',
+    bgmExtension: '',
     is_active: false,
     updated_date: '',
     created_date: '',
