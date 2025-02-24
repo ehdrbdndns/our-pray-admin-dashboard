@@ -413,7 +413,7 @@ export default function LectureDetail({
               {
                 isLoading
                   ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  : '강의 생성'
+                  : '강의 수정'
               }
             </Button>
           </div>
