@@ -9,7 +9,38 @@ export const s3Client = new S3Client({
   },
 });
 
-export const uploadFileToS3 = async (path: string, file: File): Promise<string> => {
+const getFileExtensionFromMimeType = (mimeType: string) => {
+  let extension = '';
+
+  switch (mimeType) {
+    case 'audio/mpeg':
+      extension = 'mp3';
+      break;
+    case 'audio/mp4':
+    case 'audio/x-m4a':
+      extension = 'm4a';
+      break;
+    case 'audio/x-wav':
+      extension = 'wav';
+      break;
+    case 'image/png':
+      extension = 'png';
+      break;
+    case 'image/jpeg':
+      extension = 'jpeg';
+      break;
+    // 필요한 경우 다른 MIME 타입을 추가
+    default:
+      throw new Error('Unsupported MIME type: ' + mimeType);
+  }
+
+  return extension;
+};
+
+export const uploadFileToS3 = async (path: string, file: File): Promise<{
+  url: string,
+  extension: string
+}> => {
   const signRes = await fetch('/api/s3/sign', {
     method: 'POST',
     body: JSON.stringify({
@@ -39,5 +70,8 @@ export const uploadFileToS3 = async (path: string, file: File): Promise<string> 
     throw new Error('failed to upload file');
   }
 
-  return url + fields.key;
+  return {
+    url: url + fields.key,
+    extension: getFileExtensionFromMimeType(file.type),
+  };
 }

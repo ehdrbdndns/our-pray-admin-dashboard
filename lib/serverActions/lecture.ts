@@ -35,19 +35,31 @@ export const retrieveLecturesByPlanId = async (plan_id: string) => {
 
 export const insertOrUpdateLectureFromConn = async (conn: PoolConnection, lecture: LectureType) => {
   try {
-    const { lecture_id, plan_id, title, description, time, bgm, is_active } = lecture;
+    const {
+      lecture_id, plan_id, title, description, time, bgm, bgmExtension, is_active
+    } = lecture;
 
     const [rows]: any = await conn.execute(`
-      INSERT INTO lecture (lecture_id, plan_id, title, description, time, bgm, is_active)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO lecture (
+        lecture_id
+        , plan_id
+        , title
+        , description
+        , time
+        , bgm
+        , bgm_extension
+        , is_active
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         title = VALUES(title),
         description = VALUES(description),
         time = VALUES(time),
         bgm = VALUES(bgm),
+        bgm_extension = VALUES(bgm_extension),
         is_active = VALUES(is_active),
         updated_date = NOW()
-    `, [lecture_id, plan_id, title, description, time, bgm, is_active]);
+    `, [lecture_id, plan_id, title, description, time, bgm, bgmExtension, is_active]);
 
     return rows;
   } catch (e) {
@@ -63,6 +75,7 @@ export const insertOrUpdateAudioFromConn = async (conn: PoolConnection, lectureA
       audio.lecture_id,
       audio.file_name,
       audio.audio,
+      audio.extension,
       audio.caption,
       audio.is_active,
       audio.start_time
@@ -70,7 +83,7 @@ export const insertOrUpdateAudioFromConn = async (conn: PoolConnection, lectureA
 
     const [rows]: any = await conn.query(`
       INSERT INTO lecture_audio 
-      (lecture_audio_id, lecture_id, file_name, audio, caption, is_active, start_time)
+      (lecture_audio_id, lecture_id, file_name, audio, extension, caption, is_active, start_time)
       VALUES ?
       ON DUPLICATE KEY UPDATE
         file_name = VALUES(file_name),
@@ -78,6 +91,7 @@ export const insertOrUpdateAudioFromConn = async (conn: PoolConnection, lectureA
         caption = VALUES(caption),
         is_active = VALUES(is_active),
         start_time = VALUES(start_time),
+        extension = VALUES(extension),
         updated_date = NOW()
     `, [values]);
 

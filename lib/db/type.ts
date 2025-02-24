@@ -83,10 +83,13 @@ export interface LectureType extends RowDataPacket {
   time: string;
   bgmFile: File;
   bgm: string;
+  bgmExtension: string;
   is_active: boolean;
   updated_date: string;
   created_date: string;
 }
+
+export type AudioType = { url: string, extension: string };
 
 export interface LectureAudioType extends RowDataPacket {
   lecture_audio_id: string;
@@ -94,6 +97,7 @@ export interface LectureAudioType extends RowDataPacket {
   file_name: string;
   audioFile: File;
   audio: string;
+  extension: string;
   caption: string;
   is_active: boolean;
   start_time: string;

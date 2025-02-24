@@ -38,7 +38,7 @@ export default function LectureDetail({
       minute: lecture.time,
       is_active: lecture.is_active,
       bgm: null, // do not need to fetch bgm file
-
+      bgmExtension: lecture.bgmExtension,
       audioTypeList: [...audios.map(_ => 'existing')],
       audioIdList: [...audios.map(row => row.lecture_audio_id)],
       startTimeList: [...audios.map(row => row.start_time)],
@@ -102,14 +102,15 @@ export default function LectureDetail({
   const onClickDeleteAudio = (index: number) => {
     const audioTypeList = form.getValues().audioTypeList;
 
+    // 이미 존재하는 오디오 파일을 삭제하는 경우
     if (audioTypeList[index] === 'existing') {
       audioTypeList[index] = 'delete';
       form.setValue('audioTypeList', audioTypeList);
       setLectureCount(lectureCount - 1);
-      console.log(form.getValues());
       return;
     }
 
+    // 새로운 오디오 파일을 삭제하는 경우
     const audioFileList = form.getValues().audioFileList;
     const audioNameList = form.getValues().audioNameList;
     const captionList = form.getValues().captionList;
@@ -144,9 +145,16 @@ export default function LectureDetail({
     const formData = new FormData();
 
     try {
-      let bgm = lecture.bgm;
+      let bgmInfo: {
+        url: string,
+        extension: string
+      } = {
+        url: lecture.bgm,
+        extension: lecture.bgmExtension
+      };
+
       if (values.bgm !== undefined && values.bgm !== null) {
-        bgm = await uploadFileToS3('lecture/bgm', values.bgm);
+        bgmInfo = await uploadFileToS3('lecture/bgm', values.bgm);
       }
 
       const insertAudioList = [];
@@ -158,8 +166,12 @@ export default function LectureDetail({
         if (audioType === 'delete') {
           deleteAudioList.push(values.audioIdList[i]);
         } else if (audioType === 'new') {
-          const audio = await uploadFileToS3(`lecture/audio`, values.audioFileList[i]);
-          insertAudioList.push(audio);
+          const audioInfo = await uploadFileToS3(`lecture/audio`, values.audioFileList[i]);
+          insertAudioList.push(audioInfo);
+        } else if (audioType === 'existing') {
+          // 이미 존재하는 파일은 건드리지 않음
+        } else {
+          throw new Error('Invalid audioType');
         }
       }
 
@@ -167,7 +179,8 @@ export default function LectureDetail({
       formData.append('lecture_id', lecture.lecture_id);
 
       formData.append('title', values.title);
-      formData.append('bgm', bgm);
+      formData.append('bgm', bgmInfo.url);
+      formData.append('bgmExtension', bgmInfo.extension);
       formData.append('description', values.description);
       formData.append('time', values.minute);
       formData.append('is_active', values.is_active.toString());

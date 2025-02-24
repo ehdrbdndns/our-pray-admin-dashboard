@@ -123,9 +123,19 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
     const formData = new FormData();
 
     try {
-      let bgm = null;
+      let bgmInfo: {
+        url: string,
+        extension: string
+      } | null = null;
+
       if (values.bgm !== null) {
-        bgm = await uploadFileToS3('lecture/bgm', values.bgm);
+        bgmInfo = await uploadFileToS3('lecture/bgm', values.bgm);
+      }
+
+      if (!bgmInfo) {
+        alert('배경음악 업로드에 실패했습니다.');
+        setIsLoading(false);
+        return;
       }
 
       const audioList = [];
@@ -138,7 +148,8 @@ export default function LectureDetail({ plan_id }: { plan_id: string }) {
       formData.append('plan_id', plan_id);
 
       formData.append('title', values.title);
-      formData.append('bgm', bgm || '');
+      formData.append('bgm', bgmInfo.url);
+      formData.append('bgmExtension', bgmInfo.extension);
       formData.append('description', values.description);
       formData.append('time', values.minute);
 
