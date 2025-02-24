@@ -39,9 +39,9 @@ export default function PlanDetail() {
       const s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail);
       const author_profile = await uploadFileToS3('plan/author_profile', values.author_profile);
 
-      formData.append('thumbnail', thumbnail);
-      formData.append('s_thumbnail', s_thumbnail);
-      formData.append('author_profile', author_profile);
+      formData.append('thumbnail', thumbnail.url);
+      formData.append('s_thumbnail', s_thumbnail.url);
+      formData.append('author_profile', author_profile.url);
 
       formData.append('title', values.title);
       formData.append('description', values.description);

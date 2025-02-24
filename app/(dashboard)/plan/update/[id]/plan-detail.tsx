@@ -43,15 +43,18 @@ export default function PlanDetail({ plan }: { plan: PlanType }) {
       let author_profile = plan.author_profile;
 
       if (values.thumbnail !== undefined) {
-        thumbnail = await uploadFileToS3('plan/thumbnail', values.thumbnail)
+        const { url, extension } = await uploadFileToS3('plan/thumbnail', values.thumbnail)
+        thumbnail = url;
       }
 
       if (values.s_thumbnail !== undefined) {
-        s_thumbnail = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail)
+        const { url, extension } = await uploadFileToS3('plan/s_thumbnail', values.s_thumbnail)
+        s_thumbnail = url;
       }
 
       if (values.author_profile !== undefined) {
-        author_profile = await uploadFileToS3('plan/author_profile', values.author_profile)
+        const { url, extension } = await uploadFileToS3('plan/author_profile', values.author_profile);
+        author_profile = url;
       }
 
       formData.append('thumbnail', thumbnail);
