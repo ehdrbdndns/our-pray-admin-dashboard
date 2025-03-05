@@ -38,7 +38,7 @@ export default function LectureDetail({
       minute: lecture.time,
       is_active: lecture.is_active,
       bgm: null, // do not need to fetch bgm file
-      bgmExtension: lecture.bgmExtension,
+      bgmExtension: lecture.bgm_extension,
       audioTypeList: [...audios.map(_ => 'existing')],
       audioIdList: [...audios.map(row => row.lecture_audio_id)],
       startTimeList: [...audios.map(row => row.start_time)],
@@ -150,7 +150,7 @@ export default function LectureDetail({
         extension: string
       } = {
         url: lecture.bgm,
-        extension: lecture.bgmExtension
+        extension: lecture.bgm_extension
       };
 
       if (values.bgm !== undefined && values.bgm !== null) {
