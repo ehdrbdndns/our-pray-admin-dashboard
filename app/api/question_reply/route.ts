@@ -94,9 +94,9 @@ export async function POST(req: NextRequest) {
     // send notification to user
     await pushNotification({
       pushTokens: [expoPushToken],
-      body: '',
-      title: '',
-      subtitle: '궁금했던 답변이 도착했어요!',
+      body: '상담 내역에서 답변을 확인해보세요!',
+      title: '답변이 도착했어요!',
+      subtitle: '',
       data: {},
       sound: 'default',
       badge: 0,
