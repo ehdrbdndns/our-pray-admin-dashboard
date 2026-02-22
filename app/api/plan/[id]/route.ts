@@ -2,10 +2,10 @@ import { hasSession } from "@/lib/serverActions/auth";
 import { retrievePlanById } from "@/lib/serverActions/plan";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   console.log("retrieve plan by id");
 
-  const id = params.id;
+  const { id } = await params;
 
   try {
     const session = await hasSession();

@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import LectureDetail from "./lecture-detail";
 import { LectureAudioType, LectureType } from "@/lib/db/type";
 
-export default function LectureDetailPage({ params }: { params: { plan_id: string, lecture_id: string } }) {
+export default function LectureDetailPage({ params }: { params: Promise<{ plan_id: string, lecture_id: string }> }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [lecture, setLecture] = useState<LectureType>({
@@ -21,7 +21,7 @@ export default function LectureDetailPage({ params }: { params: { plan_id: strin
   } as LectureType);
   const [audios, setAudios] = useState<LectureAudioType[]>([]);
 
-  const { plan_id, lecture_id } = params;
+  const { plan_id, lecture_id } = use(params);
 
   useEffect(() => {
     const fetchLecture = async () => {

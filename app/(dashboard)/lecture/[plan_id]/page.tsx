@@ -6,9 +6,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LectureType } from "@/lib/db/type";
 
-export default async function LecturePage({ params }: { params: { plan_id: string } }) {
+export default async function LecturePage({ params }: { params: Promise<{ plan_id: string }> }) {
 
-  const { plan_id } = params;
+  const { plan_id } = await params;
   const lectures = await retrieveLecturesByPlanId(plan_id) as LectureType[];
 
   return (

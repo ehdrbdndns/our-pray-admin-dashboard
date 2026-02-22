@@ -2,10 +2,10 @@ import { hasSession } from "@/lib/serverActions/auth";
 import { retrieveAudioByLectureId, retrieveLectureByLectureId } from "@/lib/serverActions/lecture";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   console.log("retrieve lecture by id");
 
-  const id = params.id;
+  const { id } = await params;
 
   try {
     const session = await hasSession();
